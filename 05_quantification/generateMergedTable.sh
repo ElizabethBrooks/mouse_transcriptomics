@@ -3,14 +3,16 @@
 # script to generate a merge gene counts file
 # usage: bash generateMergedTable.sh
 
-# set the inputs path
-#inputsPath="/scratch365/ebrooks5/D_melanica_UV_exposure/short_read_data_processed_test/Pfrender_MP-3533_250512_CMG/counted"
-#inputsPath="/scratch365/ebrooks5/D_melanica_UV_exposure/short_read_data_processed_EGAPx/Pfrender_MP-3533_250512_CMG/counted"
-inputsPath="/scratch365/ebrooks5/D_melanica_UV_exposure/short_read_data_processed_EGAPx_test/Pfrender_MP-3533_250512_CMG/counted"
+# Retrieve analysis outputs absolute path
+outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
+
+# setup the inputs path
+inputsPath=$outputsPath"/counted"
 
 # initialize the merged counts file
 echo "gene" > $inputsPath"/counts_merged.tmp.csv"
-cat $inputsPath"/MUV10_S10_L004/counts.txt" | cut -f1 >> $inputsPath"/counts_merged.tmp.csv"
+firstFile=$(ls -1 $inputsPath | head -n 1)
+cat $firstFile"/counts.txt" | cut -f1 >> $inputsPath"/counts_merged.tmp.csv"
 
 # merge counts for each sample
 for i in $inputsPath"/"*"/"; do 

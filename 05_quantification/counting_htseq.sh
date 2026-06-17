@@ -1,40 +1,24 @@
 #!/bin/bash
-#$ -M ebrooks5@nd.edu
-#$ -m abe
-#$ -r n
-#$ -N counting_htseq_jobOutput
+#SBATCH --ntasks=8
+#SBATCH --partition=mack
+#SBATCH --mem-per-cpu=8GB
+#SBATCH --mail-user=e959b751@ku.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
 
 # script to perform htseq-count counting of trimmed, aligned, then name sorted
 # paired end reads
 # usage: qsub counting_htseq.sh sortedFolder
 # usage Ex: qsub counting_htseq.sh sorted_coordinate
-## ZQ D melanica data
-## job 1945636
-## EGAPx D melanica data
-## job 1950551
-## ZQ D melanica data
-## job 2048635
-
-#Required modules for ND CRC servers
-module load bio/3.0
-#module load bio/python/2.7.14
-#module load bio/htseq/0.11.2
 
 # retrieve input folder name
 sortedFolder=$1
 
 #Retrieve genome features absolute path for alignment
-genomeFile=$(grep "genomeFeatures:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/genomeFeatures://g")
-#genomeFile=$(grep "genomeFeatures:" ../"inputData/shortReads/inputPaths_EGAPx_D_melanica.txt" | tr -d " " | sed "s/genomeFeatures://g")
+genomeFile=$(grep "genomeFeatures:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/genomeFeatures://g")
 # Retrieve analysis outputs absolute path
-outputsPath=$(grep "outputs:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/outputs://g")
-#outputsPath=$(grep "outputs:" ../"inputData/shortReads/inputPaths_EGAPx_D_melanica.txt" | tr -d " " | sed "s/outputs://g")
+outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 # Retrieve paired reads absolute path for alignment
-readPath=$(grep "pairedReads:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/pairedReads://g")
-#readPath=$(grep "pairedReads:" ../"inputData/shortReads/inputPaths_EGAPx_D_melanica.txt" | tr -d " " | sed "s/pairedReads://g")
-# Make a new directory for project analysis
-projectDir=$(basename $readPath)
-outputsPath=$outputsPath"/"$projectDir
+readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
 
 # setup the inputs path
 inputsPath=$outputsPath"/"$sortedFolder

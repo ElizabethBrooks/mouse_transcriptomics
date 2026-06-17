@@ -8,6 +8,9 @@
 # Script to perform trimmomatic trimming of paired end reads
 # Usage: sbatch trimmomatic_shortReads.sh
 
+# Required modules for servers
+module load trimmomatic
+
 # Retrieve paired reads absolute path for alignment
 readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
 # Retrieve adapter absolute path for alignment

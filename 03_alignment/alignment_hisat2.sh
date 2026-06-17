@@ -1,44 +1,23 @@
 #!/bin/bash
-#$ -M ebrooks5@nd.edu
-#$ -m abe
-#$ -r n
-#$ -N alignment_hisat2_jobOutput
-#$ -pe smp 4
+#SBATCH --ntasks=8
+#SBATCH --partition=mack
+#SBATCH --mem-per-cpu=8GB
+#SBATCH --mail-user=e959b751@ku.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
 
 # Script to perform hisat2 alignment of trimmed
 # paired end reads
 # Note that a hisat2 genome refernce build folder needs to be generated first
-# usage: qsub alignment_hisat2.sh
-# ZQ D melanica data - run 1
-## job 1845224
-# ZQ D melanica data
-## job 1894531
-# EGAPx D melanica data
-## job 1947836
-# un-conc and al-conc
-# EGAPx D melanica data
-## job 2071745
-
-#Required modules for ND CRC servers
-module load bio/2.0
-#module load bio/hisat2/2.1.0
+# usage: sbatch alignment_hisat2.sh
 
 #Retrieve genome reference absolute path for alignment
-#buildFile=$(grep "genomeReference:" ../inputData/shortReads/inputPaths_ZQ_D_melanica.txt | tr -d " " | sed "s/genomeReference://g")
-buildFile=$(grep "genomeReference:" ../inputData/shortReads/inputPaths_EGAPx_D_melanica.txt | tr -d " " | sed "s/genomeReference://g")
+buildFile=$(grep "genomeReference:" ../inputData/inputPaths.txt | tr -d " " | sed "s/genomeReference://g")
 # Retrieve analysis outputs absolute path
-#outputsPath=$(grep "outputs:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/outputs://g")
-outputsPath=$(grep "outputs:" ../"inputData/shortReads/inputPaths_EGAPx_D_melanica.txt" | tr -d " " | sed "s/outputs://g")
+outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 # Retrieve paired reads absolute path for alignment
-#readPath=$(grep "pairedReads:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/pairedReads://g")
-readPath=$(grep "pairedReads:" ../"inputData/shortReads/inputPaths_EGAPx_D_melanica.txt" | tr -d " " | sed "s/pairedReads://g")
+readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
 # retrieve input trimmed reads path
-inputsPath=$(grep "outputs:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/outputs://g")
-
-# Make a new directory for project analysis
-projectDir=$(basename $readPath)
-outputsPath=$outputsPath"/"$projectDir
-inputsPath=$inputsPath"/"$projectDir
+inputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
 # set inputs absolute path
 trimmedFolder=$inputsPath"/trimmed"
@@ -81,10 +60,10 @@ for f1 in $trimmedFolder"/"*.R1_001.fq.gz; do
 	mkdir "$outputFolder"/"$curSampleNoPath"
 	#Run hisat2 with default settings
 	echo "Sample $curSampleNoPath is being aligned and converted..."
-	hisat2 -p 4 -q -x "$buildOut"/"$buildFileNoEx" -1 "$f1" -2 "$curSample".R2_001.fq.gz -S "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam \
+	hisat2 -p 8 -q -x "$buildOut"/"$buildFileNoEx" -1 "$f1" -2 "$curSample".R2_001.fq.gz -S "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam \
 	--un-conc-gz "$outputFolder"/"$curSampleNoPath"/un_conc.fq.gz --al-conc-gz "$outputFolder"/"$curSampleNoPath"/al_conc.fq.gz --summary-file "$outputFolder"/"$curSampleNoPath"/alignedSummary.txt
 	#Convert output sam files to bam format for downstream analysis
-	samtools view -@ 4 -bS "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam > "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam
+	samtools view -@ 8 -bS "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam > "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam
 	#Remove the now converted .sam file
 	rm "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam
 	# status message

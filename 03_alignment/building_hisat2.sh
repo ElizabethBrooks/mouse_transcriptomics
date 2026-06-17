@@ -1,34 +1,19 @@
 #!/bin/bash
-#$ -M ebrooks5@nd.edu
-#$ -m abe
-#$ -r n
-#$ -N building_hisat2_jobOutput
-#$ -pe smp 4
+#SBATCH --ntasks=8
+#SBATCH --partition=mack
+#SBATCH --mem-per-cpu=8GB
+#SBATCH --mail-user=e959b751@ku.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
 
 # script to generate a hisat2 genome refernce build folder
-# usage: qsub building_hisat2.sh
-## ZQ D melanica data
-## job 1834157
-## EGAPx D melanica data
-## job 1947495
-
-#Required modules for ND CRC servers
-module load bio/2.0
-#module load bio/hisat2/2.1.0
+# usage: sbatch building_hisat2.sh
 
 #Retrieve genome reference absolute path for alignment
-#buildFile=$(grep "genomeReference:" ../inputData/shortReads/inputPaths_ZQ_D_melanica.txt | tr -d " " | sed "s/genomeReference://g")
-buildFile=$(grep "genomeReference:" ../inputData/shortReads/inputPaths_EGAPx_D_melanica.txt | tr -d " " | sed "s/genomeReference://g")
+buildFile=$(grep "genomeReference:" ../inputData/inputPaths.txt | tr -d " " | sed "s/genomeReference://g")
 # Retrieve analysis outputs absolute path
-#outputsPath=$(grep "outputs:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/outputs://g")
-outputsPath=$(grep "outputs:" ../"inputData/shortReads/inputPaths_EGAPx_D_melanica.txt" | tr -d " " | sed "s/outputs://g")
+outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 # Retrieve paired reads absolute path for alignment
-#readPath=$(grep "pairedReads:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/pairedReads://g")
-readPath=$(grep "pairedReads:" ../"inputData/shortReads/inputPaths_EGAPx_D_melanica.txt" | tr -d " " | sed "s/pairedReads://g")
-
-# Make a new directory for project analysis
-projectDir=$(basename $readPath)
-outputsPath=$outputsPath"/"$projectDir
+readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
 
 #Move to outputs directory
 cd "$outputsPath"
@@ -58,7 +43,7 @@ if [ $? -eq 0 ]; then
 	buildFileNoPath=$(echo $buildFileNewPath | sed 's/\.fa//g')
 	#Begin hisat2 build
 	echo "Beginning hisat2 build... "
-	hisat2-build -p 4 -f "$outputFolder"/"$buildFileNewPath" "$outputFolder"/"$buildFileNoPath"
+	hisat2-build -p 8 -f "$outputFolder"/"$buildFileNewPath" "$outputFolder"/"$buildFileNoPath"
 	echo "hisat2 build complete!"
 else
 	echo "Build folder reference_hisat2_build already exists, skipping building..."

@@ -12,7 +12,7 @@
 # Usage Ex: sbatch fastqc_shortReads.sh trimmed
 
 # Required modules for servers
-#module load fastqc
+module load fastqc
 
 # retrieve input arguments
 inputsType=$1
