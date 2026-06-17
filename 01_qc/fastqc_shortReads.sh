@@ -22,11 +22,6 @@ readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "
 # Retrieve analysis outputs absolute path
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
-# Make a new directory for project analysis
-projectDir=$(basename $readPath)
-outputsPath=$outputsPath"/"$projectDir
-mkdir $outputsPath
-
 # check inputs type
 if [[ $inputsType == "trimmed" ]]; then
 	# set the directory for inputs
