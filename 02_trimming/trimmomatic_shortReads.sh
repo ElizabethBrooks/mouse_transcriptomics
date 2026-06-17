@@ -1,29 +1,19 @@
 #!/bin/bash
-#$ -M ebrooks5@nd.edu
-#$ -m abe
-#$ -r n
-#$ -N trimmomatic_MultiGenome_jobOutput
-#$ -pe smp 8
-#$ -q largemem
+#SBATCH --ntasks=8
+#SBATCH --partition=mack
+#SBATCH --mem-per-cpu=8GB
+#SBATCH --mail-user=e959b751@ku.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
 
 # Script to perform trimmomatic trimming of paired end reads
-# Usage: qsub trimmomatic_shortReads.sh
-## job 1843091
-
-# Required modules for ND CRC servers
-module load bio/2.0
+# Usage: sbatch trimmomatic_shortReads.sh
 
 # Retrieve paired reads absolute path for alignment
-readPath=$(grep "pairedReads:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/pairedReads://g")
+readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
 # Retrieve adapter absolute path for alignment
-adapterPath=$(grep "adapter:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/adapter://g")
+adapterPath=$(grep "adapter:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/adapter://g")
 # Retrieve analysis outputs absolute path
-outputsPath=$(grep "outputs:" ../"inputData/shortReads/inputPaths_ZQ_D_melanica.txt" | tr -d " " | sed "s/outputs://g")
-
-# Make a new directory for project analysis
-projectDir=$(basename $readPath)
-outputsPath=$outputsPath"/"$projectDir
-#mkdir $outputsPath
+outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
 # Make a new directory for analysis
 trimOut=$outputsPath"/trimmed"
