@@ -8,6 +8,7 @@
 # Script to perform fastqc quality control of paired end reads
 # Usage: sbatch fastqc_shortReads.sh inputsType
 # Usage Ex: sbatch fastqc_shortReads.sh raw
+#Submitted batch job 
 # Usage Ex: sbatch fastqc_shortReads.sh trimmed
 
 # Required modules for ND CRC servers
@@ -17,14 +18,14 @@ module load fastqc
 inputsType=$1
 
 # Retrieve paired reads absolute path for alignment
-readPath=$(grep "pairedReads:" ../"inputData/shortReads/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
+readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
 # Retrieve analysis outputs absolute path
-outputsPath=$(grep "outputs:" ../"inputData/shortReads/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
+outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
 # Make a new directory for project analysis
 projectDir=$(basename $readPath)
 outputsPath=$outputsPath"/"$projectDir
-#mkdir $outputsPath
+mkdir $outputsPath
 
 # check inputs type
 if [[ $inputsType == "trimmed" ]]; then
