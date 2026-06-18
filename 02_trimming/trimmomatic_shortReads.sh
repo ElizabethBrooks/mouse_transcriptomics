@@ -49,12 +49,7 @@ for f1 in "$readPath"/*_R1_001.fastq.gz; do
 	# phred score for trimming (Illumina 1.9)
 	score=33
 	# Perform adapter trimming on paired reads using 8 threads
-	trimmomatic PE -threads 8 -phred"$score" $f1 $f2 $sampleTag".R1_001.fq.gz" $sampleTag"_uForward.fq.gz" $sampleTag".R2_001.fq.gz" $sampleTag"_uReverse.fq.gz" ILLUMINACLIP:"$adapterPath" LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:60 HEADCROP:10
-	# Clean up
-	rm -r $noPath"_R1_001_fastqc.zip"
-	rm -r $noPath"_R1_001_fastqc/"
-	rm -r $noPath"_R2_001_fastqc.zip"
-	rm -r $noPath"_R2_001_fastqc/"
+	trimmomatic PE -threads 8 -phred"$score" $f1 $f2 $sampleTag".R1_001.fq.gz" $sampleTag"_uForward.fq.gz" $sampleTag".R2_001.fq.gz" $sampleTag"_uReverse.fq.gz" ILLUMINACLIP:"$adapterPath":2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:60 HEADCROP:10
 	# Print status message
 	echo "Processed!"
 done

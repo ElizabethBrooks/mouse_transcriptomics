@@ -1,6 +1,6 @@
 species: M_musculus
 pairedReads: /kuhpc/scratch/mack/e959b751/data/metAdapProject/rawData
-adapter: /scratch365/ebrooks5/D_melanica_UV_exposure/short_read_data_processed/data/TruSeq3-PE.fa:2:30:10
+adapter: /scratch/mack/e959b751/data/adapters/TruSeq3-PE.fa
 genomeReference: /kuhpc/scratch/mack/e959b751/data/genome/Mus_musculus.GRCm39.dna.toplevel.fa
 genomeFeatures: /kuhpc/scratch/mack/e959b751/data/genome/Mus_musculus.GRCm39.112.gtf
 outputs: /kuhpc/scratch/mack/e959b751/projects/metabolic_adaptation
