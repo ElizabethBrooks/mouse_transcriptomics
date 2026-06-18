@@ -10,6 +10,9 @@
 # Note that a hisat2 genome refernce build folder needs to be generated first
 # usage: sbatch alignment_hisat2.sh
 
+# Required modules for servers
+module load hisat2
+
 #Retrieve genome reference absolute path for alignment
 buildFile=$(grep "genomeReference:" ../inputData/inputPaths.txt | tr -d " " | sed "s/genomeReference://g")
 # Retrieve analysis outputs absolute path
@@ -39,6 +42,7 @@ fi
 inputOutFile=$outputFolder"/software_summary.txt"
 #Add software version to output summary file
 hisat2 --version > $inputOutFile
+samtools--version >> $inputOutFile
 
 #Build output directory for Hisat reference
 buildOut="$outputsPath"/"reference_hisat2_build"

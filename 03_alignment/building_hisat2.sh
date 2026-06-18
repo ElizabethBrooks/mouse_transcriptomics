@@ -8,6 +8,9 @@
 # script to generate a hisat2 genome refernce build folder
 # usage: sbatch building_hisat2.sh
 
+# Required modules for servers
+module load hisat2
+
 #Retrieve genome reference absolute path for alignment
 buildFile=$(grep "genomeReference:" ../inputData/inputPaths.txt | tr -d " " | sed "s/genomeReference://g")
 # Retrieve analysis outputs absolute path
