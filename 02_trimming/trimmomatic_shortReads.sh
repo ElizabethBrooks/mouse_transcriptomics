@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --ntasks=8
 #SBATCH --partition=mack
+#SBATCH --time=48:00:00
 #SBATCH --mem-per-cpu=8GB
 #SBATCH --mail-user=e959b751@ku.edu
 #SBATCH --mail-type=BEGIN,END,FAIL

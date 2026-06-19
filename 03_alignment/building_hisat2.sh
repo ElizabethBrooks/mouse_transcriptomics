@@ -1,12 +1,14 @@
 #!/bin/bash
 #SBATCH --ntasks=8
-#SBATCH --partition=mack
+#SBATCH --partition=sixhour
+#SBATCH --time=6:00:00
 #SBATCH --mem-per-cpu=8GB
 #SBATCH --mail-user=e959b751@ku.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
 
 # script to generate a hisat2 genome refernce build folder
 # usage: sbatch building_hisat2.sh
+#Submitted batch job 22893957
 
 # Required modules for servers
 module load hisat2
