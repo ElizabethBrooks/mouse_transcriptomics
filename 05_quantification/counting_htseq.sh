@@ -8,8 +8,11 @@
 
 # script to perform htseq-count counting of trimmed, aligned, then name sorted
 # paired end reads
-# usage: qsub counting_htseq.sh sortedFolder
-# usage Ex: qsub counting_htseq.sh sorted_coordinate
+# usage: sbatch counting_htseq.sh sortedFolder
+# usage Ex: sbatch counting_htseq.sh sorted_coordinate
+
+# Required modules for servers
+module load htseq
 
 # retrieve input folder name
 sortedFolder=$1
@@ -18,8 +21,6 @@ sortedFolder=$1
 genomeFile=$(grep "genomeFeatures:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/genomeFeatures://g")
 # Retrieve analysis outputs absolute path
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
-# Retrieve paired reads absolute path for alignment
-readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
 
 # setup the inputs path
 inputsPath=$outputsPath"/"$sortedFolder
@@ -35,6 +36,11 @@ if [ $? -ne 0 ]; then
 	echo "The $outputsPath/$outputFolder directory already exsists... please remove before proceeding."
 	exit 1
 fi
+
+#Name output file of inputs
+inputOutFile=$outputFolder"/software_summary.txt"
+#Add software version to output summary file
+htseq-count --version > $inputOutFile
 
 #Loop through all sorted forward and reverse paired reads and store the file locations in an array
 for f1 in "$inputsPath"/*/*.bam; do

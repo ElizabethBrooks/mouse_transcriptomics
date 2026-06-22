@@ -44,7 +44,7 @@ fi
 inputOutFile=$outputFolder"/software_summary.txt"
 #Add software version to output summary file
 hisat2 --version > $inputOutFile
-samtools--version >> $inputOutFile
+samtools --version >> $inputOutFile
 
 #Build output directory for Hisat reference
 buildOut="$outputsPath"/"reference_hisat2_build"

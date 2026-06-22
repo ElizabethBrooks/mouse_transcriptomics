@@ -10,7 +10,9 @@
 # paired end reads
 # usage: sbatch sorting_samtools.sh sortingMethod
 # usage ex: sbatch sorting_samtools.sh coordinate
+#Submitted batch job 23078350
 # usage ex: sbatch sorting_samtools.sh name
+#Submitted batch job 23078439
 
 # Required modules for servers
 module load samtools
