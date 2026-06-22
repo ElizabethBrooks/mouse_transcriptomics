@@ -10,6 +10,7 @@
 # paired end reads
 # usage: sbatch counting_htseq.sh sortedFolder
 # usage Ex: sbatch counting_htseq.sh sorted_coordinate
+#Submitted batch job 
 
 # Required modules for servers
 module load htseq
@@ -58,6 +59,6 @@ for f1 in "$inputsPath"/*/*.bam; do
 	#--secondary-alignments ignore --supplementary-alignments ignore
 	#Flag to output features in sam format
 	#-o "$outputFolder"/"$curSampleNoPath"/counted.sam
-	htseq-count -f bam -a 60 -r pos -s no -m union -t gene -i ID "$curAlignedSample" "$genomeFile" > "$outputFolder"/"$curSampleNoPath"/counts.txt
+	htseq-count -f bam -a 60 -r pos -s no -m union -t gene -i gene_id "$curAlignedSample" "$genomeFile" > "$outputFolder"/"$curSampleNoPath"/counts.txt
 	echo "Sample $curSampleNoPath has been counted!"
 done
