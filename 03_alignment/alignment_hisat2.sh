@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --ntasks=8
 #SBATCH --partition=mack
-#SBATCH --time=48:00:00
+#SBATCH --time=96:00:00
 #SBATCH --mem-per-cpu=8GB
 #SBATCH --mail-user=e959b751@ku.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
@@ -10,7 +10,7 @@
 # paired end reads
 # Note that a hisat2 genome refernce build folder needs to be generated first
 # usage: sbatch alignment_hisat2.sh
-#Submitted batch job 
+#Submitted batch job 23038876
 
 # Required modules for servers
 module load hisat2

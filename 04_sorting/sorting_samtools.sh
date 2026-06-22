@@ -1,13 +1,19 @@
 #!/bin/bash
 #SBATCH --ntasks=8
 #SBATCH --partition=mack
+#SBATCH --time=96:00:00
 #SBATCH --mem-per-cpu=8GB
 #SBATCH --mail-user=e959b751@ku.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
 
 # Script to perform samtools sorting of trimmed, then aligned
 # paired end reads
-# usage: sbatch sorting_samtools.sh sortingMethod alignedFolder optionalAssembledFolder
+# usage: sbatch sorting_samtools.sh sortingMethod
+# usage ex: sbatch sorting_samtools.sh coordinate
+# usage ex: sbatch sorting_samtools.sh name
+
+# Required modules for servers
+module load samtools
 
 # retrieve sorting method flags from input
 if [[ "$1" == "name" || "$1" == "Name" || "$1" == "n" || "$1" == "N" ]]; then
@@ -26,8 +32,6 @@ fi
 
 # Retrieve analysis outputs absolute path
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
-# Retrieve paired reads absolute path for alignment
-readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
 
 # setup the inputs path
 inputsPath=$outputsPath"/aligned"

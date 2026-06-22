@@ -11,7 +11,7 @@
 # Usage Ex: sbatch fastqc_shortReads.sh raw
 #Submitted batch job 22865366
 # Usage Ex: sbatch fastqc_shortReads.sh trimmed
-#Submitted batch job 22893895
+#Submitted batch job 23037563
 
 # Required modules for servers
 module load fastqc
