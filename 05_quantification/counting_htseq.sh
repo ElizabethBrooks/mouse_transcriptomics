@@ -10,7 +10,7 @@
 # paired end reads
 # usage: sbatch counting_htseq.sh sortedFolder
 # usage Ex: sbatch counting_htseq.sh sorted_coordinate
-#Submitted batch job 23112272
+#Submitted batch job 
 
 # Required modules for servers
 module load htseq

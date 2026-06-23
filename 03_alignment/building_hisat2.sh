@@ -8,7 +8,7 @@
 
 # script to generate a hisat2 genome refernce build folder
 # usage: sbatch building_hisat2.sh
-#Submitted batch job 22893957
+#Submitted batch job 
 
 # Required modules for servers
 module load hisat2

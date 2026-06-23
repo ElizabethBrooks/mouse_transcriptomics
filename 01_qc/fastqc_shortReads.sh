@@ -9,9 +9,9 @@
 # Script to perform fastqc quality control of paired end reads
 # Usage: sbatch fastqc_shortReads.sh inputsType
 # Usage Ex: sbatch fastqc_shortReads.sh raw
-#Submitted batch job 22865366
+#Submitted batch job 
 # Usage Ex: sbatch fastqc_shortReads.sh trimmed
-#Submitted batch job 23037563
+#Submitted batch job 
 
 # Required modules for servers
 module load fastqc

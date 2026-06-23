@@ -10,7 +10,7 @@
 # paired end reads
 # Note that a hisat2 genome refernce build folder needs to be generated first
 # usage: sbatch alignment_hisat2.sh
-#Submitted batch job 23038876
+#Submitted batch job 
 
 # Required modules for servers
 module load hisat2

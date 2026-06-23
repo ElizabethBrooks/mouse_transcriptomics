@@ -8,7 +8,7 @@
 
 # Script to perform trimmomatic trimming of paired end reads
 # Usage: sbatch trimmomatic_shortReads.sh
-#Submitted batch job 22946567
+#Submitted batch job 
 
 # Required modules for servers
 module load trimmomatic
@@ -21,15 +21,15 @@ adapterPath=$(grep "adapter:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
 # Make a new directory for analysis
-trimOut=$outputsPath"/trimmed"
-mkdir $trimOut
+outputsPath=$outputsPath"/trimmed"
+mkdir $outputsPath
 # Check if the folder already exists
 if [ $? -ne 0 ]; then
-	echo "The $trimOut directory already exsists... please remove before proceeding."
+	echo "The $outputsPath directory already exsists... please remove before proceeding."
 	exit 1
 fi
 # Move to the new directory
-cd $trimOut
+cd $outputsPath
 
 # Name output file of inputs
 versionFile=$outputsPath"/version_summary.txt"

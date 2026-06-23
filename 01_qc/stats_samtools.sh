@@ -22,7 +22,7 @@ outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s
 inputsPath=$outputsPath"/aligned"
 
 # create outputs directory
-outputFolder=$outputsPath"/aligned_stats"
+outputFolder=$outputsPath"/stats_aligned"
 mkdir "$outputFolder"
 # check if the folder already exists
 if [ $? -ne 0 ]; then
