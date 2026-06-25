@@ -9,7 +9,7 @@
 # Script to perform fastqc quality control of paired end reads
 # Usage: sbatch fastqc_shortReads.sh inputsType
 # Usage Ex: sbatch fastqc_shortReads.sh raw
-#Submitted batch job 
+#Submitted batch job 23305391
 # Usage Ex: sbatch fastqc_shortReads.sh trimmed
 #Submitted batch job 
 

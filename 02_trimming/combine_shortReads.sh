@@ -1,7 +1,6 @@
 #!/bin/bash
-#SBATCH --ntasks=8
-#SBATCH --partition=mack
-#SBATCH --time=48:00:00
+#SBATCH --partition=sixhour
+#SBATCH --time=6:00:00
 #SBATCH --mem-per-cpu=8GB
 #SBATCH --mail-user=e959b751@ku.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
@@ -27,17 +26,17 @@ fi
 cd $outputsPath
 
 # loop through all samples and combine lanes
-for f1 in "$readPath"/*_R1_001.fastq.gz; do
+for f1 in $readPath"/"*"_L007_R1_001.fastq.gz"; do
 	# trim extension from current file name
-	curSample=$(echo $f1 | sed 's/_R._001\.fastq\.gz//')
-	# set paired file name
-	f2=$curSample"_R2_001.fastq.gz"
+	curSample=$(echo $f1 | sed 's/_L007_R1_001\.fastq\.gz//')
 	# trim to sample tag
-	sampleTag=$(basename $f1 | sed 's/_R._001\.fastq\.gz//')
+	sampleTag=$(basename $f1 | sed 's/_L007_R1_001\.fastq\.gz//')
 	# print status message
 	echo "Processing $sampleTag"
-	# combine reads
-
+	# combine lanes of forward reads
+	cat $readPath"/"$sampleTag"_"*"_R1_001.fastq.gz" > $outputsPath"/"$sampleTag"_R1_001.fastq.gz"
+	# combine lanes of reverse reads
+	cat $readPath"/"$sampleTag"_"*"_R2_001.fastq.gz" > $outputsPath"/"$sampleTag"_R2_001.fastq.gz"
 	# print status message
 	echo "Processed!"
 done
