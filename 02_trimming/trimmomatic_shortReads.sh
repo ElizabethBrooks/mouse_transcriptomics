@@ -13,13 +13,12 @@
 # Required modules for servers
 module load trimmomatic
 
+# Retrieve paired reads absolute path for alignment
+readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
 # Retrieve adapter absolute path for alignment
 adapterPath=$(grep "adapter:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/adapter://g")
 # Retrieve analysis outputs absolute path
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
-
-# set inputs absolute path
-readPath=$outputsPath"/combined"
 
 # Make a new directory for analysis
 outputsPath=$outputsPath"/trimmed"

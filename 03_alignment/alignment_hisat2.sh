@@ -25,7 +25,7 @@ readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "
 inputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
 # set inputs absolute path
-trimmedFolder=$inputsPath"/trimmed"
+trimmedFolder=$inputsPath"/combined"
 
 # move to outputs directory
 cd "$outputsPath"
