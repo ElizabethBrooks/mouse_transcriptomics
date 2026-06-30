@@ -8,7 +8,7 @@
 
 # Script to perform trimmomatic trimming of paired end reads
 # Usage: sbatch trimmomatic_shortReads.sh
-#Submitted batch job 
+#Submitted batch job 23427405
 
 # Required modules for servers
 module load trimmomatic

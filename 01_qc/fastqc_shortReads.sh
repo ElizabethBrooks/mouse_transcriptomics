@@ -11,7 +11,7 @@
 # Usage Ex: sbatch fastqc_shortReads.sh raw
 #Submitted batch job 23305391
 # Usage Ex: sbatch fastqc_shortReads.sh trimmed
-#Submitted batch job 
+#Submitted batch job 23495399
 
 # Required modules for servers
 module load fastqc
@@ -52,7 +52,7 @@ versionFile=$qcOut"/software_version_summary.txt"
 fastqc -version > $versionFile
 
 # perform QC
-fastqc $readPath"/"*\.f*q.gz -o $qcOut
+fastqc $readPath"/"*"_001."*".gz" -o $qcOut
 
 # run multiqc
 multiqc $qcOut -o $qcOut -n "multiqc"

@@ -7,7 +7,8 @@
 
 # Script to combine lanes of paired end reads
 # Usage: sbatch combine_shortReads.sh
-#Submitted batch job 
+#Submitted batch job 23495850
+#Submitted batch job
 
 # retrieve paired reads absolute path for alignment
 readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
@@ -33,12 +34,16 @@ for f1 in $readPath"/"*"_L007_R1_001.fastq.gz"; do
 	sampleTag=$(basename $f1 | sed 's/_L007_R1_001\.fastq\.gz//')
 	# print status message
 	echo "Processing $sampleTag"
-	# combine lanes of forward reads
-	cat $readPath"/"$sampleTag"_"*"_R1_001.fastq.gz" > $outputsPath"/"$sampleTag"_R1_001.fastq.gz"
-	# combine lanes of reverse reads
-	cat $readPath"/"$sampleTag"_"*"_R2_001.fastq.gz" > $outputsPath"/"$sampleTag"_R2_001.fastq.gz"
-	# print status message
-	echo "Processed!"
+	if [[ -f $outputsPath"/"$sampleTag"_R2_001.fastq.gz" ]]; then
+	    echo "File exists."
+	else
+		# combine lanes of forward reads
+		cat $readPath"/"$sampleTag"_"*"_R1_001.fastq.gz" > $outputsPath"/"$sampleTag"_R1_001.fastq.gz"
+		# combine lanes of reverse reads
+		cat $readPath"/"$sampleTag"_"*"_R2_001.fastq.gz" > $outputsPath"/"$sampleTag"_R2_001.fastq.gz"
+		# print status message
+		echo "Processed!"
+	fi
 done
 
 # print status message
