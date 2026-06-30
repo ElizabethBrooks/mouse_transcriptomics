@@ -8,7 +8,7 @@
 # Script to combine lanes of paired end reads
 # Usage: sbatch combine_shortReads.sh
 #Submitted batch job 23495850
-#Submitted batch job
+#Submitted batch job 23562323
 
 # retrieve paired reads absolute path for alignment
 readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
@@ -19,10 +19,10 @@ outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s
 outputsPath=$outputsPath"/combined"
 mkdir $outputsPath
 # check if the folder already exists
-if [ $? -ne 0 ]; then
-	echo "The $outputsPath directory already exsists... please remove before proceeding."
-	exit 1
-fi
+#if [ $? -ne 0 ]; then
+#	echo "The $outputsPath directory already exsists... please remove before proceeding."
+#	exit 1
+#fi
 # move to the new directory
 cd $outputsPath
 
