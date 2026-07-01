@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --partition=sixhour
-#SBATCH --time=6:00:00
+#SBATCH --partition=mack
+#SBATCH --time=96:00:00
 #SBATCH --mem-per-cpu=8GB
 #SBATCH --mail-user=e959b751@ku.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
@@ -8,7 +8,8 @@
 # Script to combine lanes of paired end reads
 # Usage: sbatch combine_shortReads.sh
 #Submitted batch job 23495850
-#Submitted batch job 23562323
+#Submitted batch job 23562328
+#Submitted batch job
 
 # retrieve paired reads absolute path for alignment
 readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
