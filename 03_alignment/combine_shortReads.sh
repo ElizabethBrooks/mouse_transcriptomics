@@ -9,7 +9,7 @@
 # Usage: sbatch combine_shortReads.sh
 #Submitted batch job 23495850
 #Submitted batch job 23562328
-#Submitted batch job
+#Submitted batch job 23603129
 
 # retrieve paired reads absolute path for alignment
 readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")

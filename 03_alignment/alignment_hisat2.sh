@@ -54,19 +54,19 @@ buildFileNoEx=$(echo $buildFileNoPath | sed 's/\.fasta//' | sed 's/\.fna//' | se
 
 #Loop through all forward and reverse paired reads and run Hisat2 on each pair
 # using 8 threads and samtools to convert output sam files to bam
-for f1 in $trimmedFolder"/"*.R1_001.fq.gz; do
+for f1 in $trimmedFolder"/"*_R1_001.fastq.gz; do
 	# status message
 	echo "Processing file $f1 ..."
 	#Trim extension from current file name
-	curSample=$(echo $f1 | sed 's/\.R1_001\.fq\.gz//')
+	curSample=$(echo $f1 | sed 's/_R1_001\.fastq\.gz//')
 	#Trim file path from current file name
 	curSampleNoPath=$(basename $f1)
-	curSampleNoPath=$(echo $curSampleNoPath | sed 's/\.R1_001\.fq\.gz//')
+	curSampleNoPath=$(echo $curSampleNoPath | sed 's/_R1_001\.fastq\.gz//')
 	#Create directory for current sample outputs
 	mkdir "$outputFolder"/"$curSampleNoPath"
 	#Run hisat2 with default settings
 	echo "Sample $curSampleNoPath is being aligned and converted..."
-	hisat2 -p 8 -q -x "$buildOut"/"$buildFileNoEx" -1 "$f1" -2 "$curSample".R2_001.fq.gz -S "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam \
+	hisat2 -p 8 -q -x "$buildOut"/"$buildFileNoEx" -1 "$f1" -2 "$curSample".R2_001.fastq.gz -S "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam \
 	--un-conc-gz "$outputFolder"/"$curSampleNoPath"/un_conc.fq.gz --al-conc-gz "$outputFolder"/"$curSampleNoPath"/al_conc.fq.gz --summary-file "$outputFolder"/"$curSampleNoPath"/alignedSummary.txt
 	#Convert output sam files to bam format for downstream analysis
 	samtools view -@ 8 -bS "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam > "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam
