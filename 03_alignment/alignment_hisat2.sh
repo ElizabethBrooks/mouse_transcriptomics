@@ -10,7 +10,7 @@
 # paired end reads
 # Note that a hisat2 genome refernce build folder needs to be generated first
 # usage: sbatch alignment_hisat2.sh
-#Submitted batch job 23685130
+#Submitted batch job 
 
 # Required modules for servers
 module load hisat2
@@ -66,7 +66,7 @@ for f1 in $trimmedFolder"/"*_R1_001.fastq.gz; do
 	mkdir "$outputFolder"/"$curSampleNoPath"
 	#Run hisat2 with default settings
 	echo "Sample $curSampleNoPath is being aligned and converted..."
-	hisat2 -p 8 -q -x "$buildOut"/"$buildFileNoEx" -1 "$f1" -2 "$curSample".R2_001.fastq.gz -S "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam \
+	hisat2 -p 8 -q -x "$buildOut"/"$buildFileNoEx" -1 "$f1" -2 "$curSample"_R2_001.fastq.gz -S "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam \
 	--un-conc-gz "$outputFolder"/"$curSampleNoPath"/un_conc.fq.gz --al-conc-gz "$outputFolder"/"$curSampleNoPath"/al_conc.fq.gz --summary-file "$outputFolder"/"$curSampleNoPath"/alignedSummary.txt
 	#Convert output sam files to bam format for downstream analysis
 	samtools view -@ 8 -bS "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam > "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam
