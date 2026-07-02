@@ -1,5 +1,6 @@
 species: M_musculus
 pairedReads: /kuhpc/scratch/mack/e959b751/data/metAdapProject/rawData
+ATACReads: /kuhpc/scratch/mack/e959b751/data/atac_seq_desertmetabolism_4_7_26_inhouse
 adapter: /scratch/mack/e959b751/data/adapters/TruSeq3-PE.fa
 genomeReference: /kuhpc/scratch/mack/e959b751/data/genome/Mus_musculus.GRCm39.dna.toplevel.fa
 genomeFeatures: /kuhpc/scratch/mack/e959b751/data/genome/Mus_musculus.GRCm39.112.gtf
