@@ -1,0 +1,60 @@
+#!/bin/bash
+#SBATCH --ntasks=8
+#SBATCH --partition=mack
+#SBATCH --time=96:00:00
+#SBATCH --mem-per-cpu=8GB
+#SBATCH --mail-user=e959b751@ku.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+
+# Script to perform trimmomatic trimming of ATAC paired end reads
+# Usage: sbatch trimmomatic_ATAC.sh
+#Submitted batch job 
+
+# Required modules for servers
+module load trimmomatic
+
+# Retrieve paired reads absolute path for alignment
+readPath=$(grep "ATACReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/ATACReads://g")
+# Retrieve adapter absolute path for alignment
+adapterPath=$(grep "ATACAdapter:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/ATACAdapter://g")
+# Retrieve analysis outputs absolute path
+outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
+
+# Make a new directory for analysis
+outputsPath=$outputsPath"/trimmed_ATAC"
+mkdir $outputsPath
+# Check if the folder already exists
+if [ $? -ne 0 ]; then
+	echo "The $outputsPath directory already exsists... please remove before proceeding."
+	exit 1
+fi
+# Move to the new directory
+cd $outputsPath
+
+# Name output file of inputs
+versionFile=$outputsPath"/version_summary.txt"
+
+# Add software version to outputs
+echo "Trimmomatic:" >> $versionFile
+trimmomatic -version >> $versionFile
+
+# Loop through all forward and reverse reads and run trimmomatic on each pair
+for f1 in "$readPath"/*_R1_001.fastq.gz; do
+	# Trim extension from current file name
+	curSample=$(echo $f1 | sed 's/_R._001\.fastq\.gz//')
+	# Set paired file name
+	f2=$curSample"_R2_001.fastq.gz"
+	# Trim to sample tag
+	sampleTag=$(basename $f1 | sed 's/_R._001\.fastq\.gz//')
+	# Print status message
+	echo "Processing $sampleTag"
+	# phred score for trimming (Illumina 1.9)
+	score=33
+	# Perform adapter trimming on paired reads using 8 threads
+	trimmomatic PE -threads 8 -phred"$score" $f1 $f2 $sampleTag".R1_001.fq.gz" $sampleTag"_uForward.fq.gz" $sampleTag".R2_001.fq.gz" $sampleTag"_uReverse.fq.gz" ILLUMINACLIP:"$adapterPath":2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:38
+	# Print status message
+	echo "Processed!"
+done
+
+# Print status message
+echo "Analysis complete!"
