@@ -11,7 +11,7 @@
 # Usage Ex: sbatch fastqc_ATAC.sh raw
 #Submitted batch job 23686947
 # Usage Ex: sbatch fastqc_ATAC.sh trimmed
-#Submitted batch job 23722116
+#Submitted batch job 
 
 # Required modules for servers
 module load fastqc
@@ -52,7 +52,7 @@ versionFile=$qcOut"/software_version_summary.txt"
 fastqc -version > $versionFile
 
 # perform QC
-fastqc $readPath"/"*".fastq.gz" -o $qcOut
+fastqc $readPath"/"*".f"*"q.gz" -o $qcOut
 
 # run multiqc
 multiqc $qcOut -o $qcOut -n "multiqc"

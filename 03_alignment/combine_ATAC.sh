@@ -7,7 +7,7 @@
 
 # Script to combine lanes of paired end reads
 # Usage: sbatch combine_ATAC.sh
-#Submitted batch job 
+#Submitted batch job 23722619
 
 # retrieve paired reads absolute path for alignment
 readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
