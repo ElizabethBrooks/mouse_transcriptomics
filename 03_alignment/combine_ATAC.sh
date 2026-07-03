@@ -15,7 +15,7 @@ readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
 # make a new directory for analysis
-outputsPath=$outputsPath"/combined"
+outputsPath=$outputsPath"/combined_ATAC"
 mkdir $outputsPath
 # check if the folder already exists
 if [ $? -ne 0 ]; then
