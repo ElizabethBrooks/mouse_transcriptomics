@@ -27,20 +27,20 @@ fi
 cd $outputsPath
 
 # loop through all samples and combine lanes
-for f1 in $trimmedFolder"/"*"_L007_R1_001.fastq.gz"; do
+for f1 in $trimmedFolder"/"*"_L007_R1_001.fq.gz"; do
 	# trim extension from current file name
-	curSample=$(echo $f1 | sed 's/_L007_R1_001\.fastq\.gz//')
+	curSample=$(echo $f1 | sed 's/_L007_R1_001\.fq\.gz//')
 	# trim to sample tag
-	sampleTag=$(basename $f1 | sed 's/_L007_R1_001\.fastq\.gz//')
+	sampleTag=$(basename $f1 | sed 's/_L007_R1_001\.fq\.gz//')
 	# print status message
 	echo "Processing $sampleTag"
-	if [[ -f $outputsPath"/"$sampleTag"_R2_001.fastq.gz" ]]; then
+	if [[ -f $outputsPath"/"$sampleTag"_R2_001.fq.gz" ]]; then
 	    echo "File exists."
 	else
 		# combine lanes of forward reads
-		cat $trimmedFolder"/"$sampleTag"_"*"_R1_001.fastq.gz" > $outputsPath"/"$sampleTag"_R1_001.fastq.gz"
+		cat $trimmedFolder"/"$sampleTag"_"*"_R1_001.fq.gz" > $outputsPath"/"$sampleTag"_R1_001.fastq.gz"
 		# combine lanes of reverse reads
-		cat $trimmedFolder"/"$sampleTag"_"*"_R2_001.fastq.gz" > $outputsPath"/"$sampleTag"_R2_001.fastq.gz"
+		cat $trimmedFolder"/"$sampleTag"_"*"_R2_001.fq.gz" > $outputsPath"/"$sampleTag"_R2_001.fastq.gz"
 		# print status message
 		echo "Processed!"
 	fi

@@ -7,7 +7,7 @@
 
 # Script to combine lanes of paired end reads
 # Usage: sbatch combine_ATAC.sh
-#Submitted batch job 
+#Submitted batch job 23724190
 
 # retrieve analysis outputs absolute path
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
