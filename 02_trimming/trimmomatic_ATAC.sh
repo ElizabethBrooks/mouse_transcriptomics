@@ -8,7 +8,7 @@
 
 # Script to perform trimmomatic trimming of ATAC paired end reads
 # Usage: sbatch trimmomatic_ATAC.sh
-#Submitted batch job 
+#Submitted batch job 23687915
 
 # Required modules for servers
 module load trimmomatic
