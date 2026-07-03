@@ -6,14 +6,14 @@
 #SBATCH --mail-user=e959b751@ku.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
 
-# Script to perform hisat2 alignment of trimmed
+# Script to perform bowtie2 alignment of trimmed
 # paired end reads
-# Note that a hisat2 genome refernce build folder needs to be generated first
-# usage: sbatch alignment_ATAC_hisat2.sh
-#Submitted batch job 23724536
+# Note that a bowtie2 genome refernce build folder needs to be generated first
+# usage: sbatch alignment_ATAC_bowtie2.sh
+#Submitted batch job 
 
 # Required modules for servers
-module load hisat2
+module load bowtie2
 
 #Retrieve genome reference absolute path for alignment
 buildFile=$(grep "genomeReference:" ../inputData/inputPaths.txt | tr -d " " | sed "s/genomeReference://g")
@@ -39,16 +39,16 @@ fi
 #Name output file of inputs
 inputOutFile=$outputFolder"/software_summary.txt"
 #Add software version to output summary file
-hisat2 --version > $inputOutFile
+bowtie2 --version > $inputOutFile
 samtools --version >> $inputOutFile
 
 #Build output directory for Hisat reference
-buildOut="$outputsPath"/"reference_hisat2_build"
+buildOut="$outputsPath"/"reference_bowtie2_build"
 #Trim .fa file extension from build file
 buildFileNoPath=$(basename $buildFile)
 buildFileNoEx=$(echo $buildFileNoPath | sed 's/\.fasta//' | sed 's/\.fna//' | sed 's/\.fa//')
 
-#Loop through all forward and reverse paired reads and run Hisat2 on each pair
+#Loop through all forward and reverse paired reads and run bowtie2 on each pair
 # using 8 threads and samtools to convert output sam files to bam
 for f1 in $trimmedFolder"/"*_R1_001.fastq.gz; do
 	# status message
@@ -60,10 +60,24 @@ for f1 in $trimmedFolder"/"*_R1_001.fastq.gz; do
 	curSampleNoPath=$(echo $curSampleNoPath | sed 's/_R1_001\.fastq\.gz//')
 	#Create directory for current sample outputs
 	mkdir "$outputFolder"/"$curSampleNoPath"
-	#Run hisat2 with default settings
+	#Run bowtie2 with default settings
 	echo "Sample $curSampleNoPath is being aligned and converted..."
-	hisat2 -p 8 -q -x "$buildOut"/"$buildFileNoEx" -1 "$f1" -2 "$curSample"_R2_001.fastq.gz -S "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam \
+	bowtie2 -p 8 -q -x "$buildOut"/"$buildFileNoEx" -1 "$f1" -2 "$curSample"_R2_001.fastq.gz -S "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam \
 	--un-conc-gz "$outputFolder"/"$curSampleNoPath"/un_conc.fq.gz --al-conc-gz "$outputFolder"/"$curSampleNoPath"/al_conc.fq.gz --summary-file "$outputFolder"/"$curSampleNoPath"/alignedSummary.txt
+	
+	bowtie2 \
+	--phred33 \
+	--mm \
+	--maxins 2000 \
+	--very-sensitive \
+	--threads 10 \
+	-x <hg38 genome index> \
+	-1 <A_R1.fastq.gz> \
+	-2 <A_R2.fastq.gz> \
+	2> \
+	<bowtie2.log> \
+	| samtools view -h -b - > <aligned.bam>
+
 	#Convert output sam files to bam format for downstream analysis
 	samtools view -@ 8 -bS "$outputFolder"/"$curSampleNoPath"/accepted_hits.sam > "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam
 	#Remove the now converted .sam file
