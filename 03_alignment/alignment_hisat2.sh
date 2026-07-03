@@ -10,7 +10,7 @@
 # paired end reads
 # Note that a hisat2 genome refernce build folder needs to be generated first
 # usage: sbatch alignment_hisat2.sh
-#Submitted batch job 23687412
+#Submitted batch job 
 
 # Required modules for servers
 module load hisat2
@@ -19,13 +19,9 @@ module load hisat2
 buildFile=$(grep "genomeReference:" ../inputData/inputPaths.txt | tr -d " " | sed "s/genomeReference://g")
 # Retrieve analysis outputs absolute path
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
-# Retrieve paired reads absolute path for alignment
-readPath=$(grep "pairedReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/pairedReads://g")
-# retrieve input trimmed reads path
-inputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
 # set inputs absolute path
-trimmedFolder=$inputsPath"/combined"
+trimmedFolder=$outputsPath"/combined"
 
 # move to outputs directory
 cd "$outputsPath"

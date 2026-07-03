@@ -7,12 +7,13 @@
 
 # Script to combine lanes of paired end reads
 # Usage: sbatch combine_ATAC.sh
-#Submitted batch job 23723455
+#Submitted batch job 
 
-# retrieve paired reads absolute path for alignment
-readPath=$(grep "ATACReads:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/ATACReads://g")
 # retrieve analysis outputs absolute path
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
+
+# set inputs absolute path
+trimmedFolder=$outputsPath"/combined_ATAC"
 
 # make a new directory for analysis
 outputsPath=$outputsPath"/combined_ATAC"
@@ -26,7 +27,7 @@ fi
 cd $outputsPath
 
 # loop through all samples and combine lanes
-for f1 in $readPath"/"*"_L007.R1_001.fq.gz"; do
+for f1 in $trimmedFolder"/"*"_L007.R1_001.fq.gz"; do
 	# trim extension from current file name
 	curSample=$(echo $f1 | sed 's/_L007.R1_001\.fq\.gz//')
 	# trim to sample tag
@@ -37,9 +38,9 @@ for f1 in $readPath"/"*"_L007.R1_001.fq.gz"; do
 	    echo "File exists."
 	else
 		# combine lanes of forward reads
-		cat $readPath"/"$sampleTag"_"*".R1_001.fq.gz" > $outputsPath"/"$sampleTag"_R1_001.fastq.gz"
+		cat $trimmedFolder"/"$sampleTag"_"*".R1_001.fq.gz" > $outputsPath"/"$sampleTag"_R1_001.fastq.gz"
 		# combine lanes of reverse reads
-		cat $readPath"/"$sampleTag"_"*".R2_001.fq.gz" > $outputsPath"/"$sampleTag"_R2_001.fastq.gz"
+		cat $trimmedFolder"/"$sampleTag"_"*".R2_001.fq.gz" > $outputsPath"/"$sampleTag"_R2_001.fastq.gz"
 		# print status message
 		echo "Processed!"
 	fi
