@@ -8,7 +8,7 @@
 
 # script to generate a hisat2 genome refernce build folder
 # usage: sbatch building_bowtie2.sh
-#Submitted batch job 
+#Submitted batch job 23725016
 
 # Required modules for servers
 module load bowtie2
