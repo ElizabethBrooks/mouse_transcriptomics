@@ -10,7 +10,7 @@
 # paired end reads
 # Note that a bowtie2 genome refernce build folder needs to be generated first
 # usage: sbatch alignment_ATAC_bowtie2.sh
-#Submitted batch job 
+#Submitted batch job 23727388
 
 # Required modules for servers
 module load bowtie2
@@ -27,7 +27,7 @@ trimmedFolder=$outputsPath"/combined_ATAC"
 cd "$outputsPath"
 
 # set output directory name
-outputFolder=$outputsPath"/aligned_ATAC"
+outputFolder=$outputsPath"/aligned_bowtie2_ATAC"
 # create output directory
 mkdir "$outputFolder"
 # check if the folder already exists
