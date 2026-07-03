@@ -13,7 +13,7 @@
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
 # set inputs absolute path
-trimmedFolder=$outputsPath"/combined_ATAC"
+trimmedFolder=$outputsPath"/trimmed_ATAC"
 
 # make a new directory for analysis
 outputsPath=$outputsPath"/combined_ATAC"
