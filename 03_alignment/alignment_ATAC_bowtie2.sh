@@ -10,7 +10,7 @@
 # paired end reads
 # Note that a bowtie2 genome refernce build folder needs to be generated first
 # usage: sbatch alignment_ATAC_bowtie2.sh
-#Submitted batch job 23727388
+#Submitted batch job 23727704
 
 # Required modules for servers
 module load bowtie2
