@@ -8,20 +8,35 @@
 
 # Script to generate alignment stats using samtools
 # paired end reads
-# usage: sbatch stats_samtools.sh
-#Submitted batch job 24126915
+# usage: sbatch stats_samtools.sh inputsType
+# usage ex: sbatch stats_ATAC_samtools.sh hisat2
+#Submitted batch job 
+# usage ex: sbatch stats_ATAC_samtools.sh bowtie2
+#Submitted batch job 
 
 # required modules for servers
 module load samtools
 
+# retrieve input arguments
+inputsType=$1
+
 # retrieve analysis outputs absolute path
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
-# setup the inputs path
-inputsPath=$outputsPath"/aligned"
+# check inputs type
+if [[ $inputsType == "hisat2" ]]; then
+	# setup the inputs path
+	inputsPath=$outputsPath"/aligned_ATAC"
+	# set the directory for analysis
+	outputFolder=$outputsPath"/stats_aligned_ATAC"
+elif [[ $inputsType == "bowtie2" ]]; then
+	# setup the inputs path
+	inputsPath=$outputsPath"/aligned_bowtie2_ATAC"
+	# set the directory for analysis
+	outputFolder=$outputsPath"/stats_aligned_bowtie2_ATAC"
+fi
 
 # create outputs directory
-outputFolder=$outputsPath"/stats_aligned"
 mkdir "$outputFolder"
 # check if the folder already exists
 if [ $? -ne 0 ]; then
