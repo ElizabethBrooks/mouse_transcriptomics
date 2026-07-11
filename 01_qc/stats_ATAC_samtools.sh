@@ -10,9 +10,9 @@
 # paired end reads
 # usage: sbatch stats_samtools.sh inputsType
 # usage ex: sbatch stats_ATAC_samtools.sh hisat2
-#Submitted batch job 
+#Submitted batch job 24128139
 # usage ex: sbatch stats_ATAC_samtools.sh bowtie2
-#Submitted batch job 
+#Submitted batch job 24128141
 
 # required modules for servers
 module load samtools

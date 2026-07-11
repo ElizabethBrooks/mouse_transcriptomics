@@ -8,41 +8,28 @@
 
 # Script to perform samtools sorting of trimmed, then aligned
 # paired end reads
-# usage: sbatch sorting_samtools.sh sortingMethod
-# usage ex: sbatch sorting_samtools.sh coordinate
-#Submitted batch job 24128164
-# usage ex: sbatch sorting_samtools.sh name
+# usage: sbatch sorting_ATAC_samtools.sh
+# usage ex: sbatch sorting_ATAC_samtools.sh
 #Submitted batch job 
 
 # Required modules for servers
 module load samtools
 
-# retrieve sorting method flags from input
-if [[ "$1" == "name" || "$1" == "Name" || "$1" == "n" || "$1" == "N" ]]; then
-	# name sorted flag with num threads flag
-	flags="-@ 4 -n"
-	methodTag="name"
-elif [[ "$1" == "coordinate" || "$1" == "Coordinate" || "$1" == "c" || "$1" == "C" ]]; then
-	# coordinate sorted with num threads flag
-	flags="-@ 4"
-	methodTag="coordinate"
-else
-	# report error with input flag
-	echo "ERROR: a flag for sorting method (name or coordinate) is expected... exiting"
-	exit 1
-fi
+# set sorting method flags from input
+flags="-@ 4"
+methodTag="coordinate"
 
 # Retrieve analysis outputs absolute path
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
 # setup the inputs path
-inputsPath=$outputsPath"/aligned"
+inputsPath=$outputsPath"/aligned_bowtie2_ATAC"
 
 # move to outputs directory
 cd "$outputsPath"
 
 # create outputs directory
-outputFolder="sorted_"$methodTag
+outputFolder="sorted_"$methodTag"_ATAC"
 mkdir "$outputFolder"
 # check if the folder already exists
 if [ $? -ne 0 ]; then
