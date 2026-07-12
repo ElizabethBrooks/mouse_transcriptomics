@@ -10,7 +10,7 @@
 # paired end reads
 # usage: sbatch sorting_ATAC_samtools.sh
 # usage ex: sbatch sorting_ATAC_samtools.sh
-#Submitted batch job 
+#Submitted batch job 24317556
 
 # Required modules for servers
 module load samtools
@@ -55,34 +55,23 @@ for f1 in $inputsPath"/"*/; do
 	echo "Sample $curSampleNoPath is being name sorted..."
 	samtools sort -@ 8 -n -o "$outputFolder"/"$curSampleNoPath"/sortedName.bam -T /tmp/"$curSampleNoPath".sortedName.bam "$curAlignedSample"
 	echo "Sample $curSampleNoPath has been name sorted!"
-	#Determine which sorting method is to be performed
-	if [[ "$methodTag" == "coordinate" ]]; then
-		#Run fixmate -m to update paired-end flags for singletons
-		echo "Sample $curSampleNoPath singleton flags are being updated..."
-		samtools fixmate -m "$outputFolder"/"$curSampleNoPath"/sortedName.bam "$outputFolder"/"$curSampleNoPath"/sortedFixed.bam
-		echo "Sample $curSampleNoPath singleton flags have been updated!"
-		#Clean up
-		rm "$outputFolder"/"$curSampleNoPath"/sortedName.bam
-		#Run samtools to prepare mapped reads for sorting by coordinate
-		#using 8 threads
-		echo "Sample $curSampleNoPath is being sorted..."
-		samtools sort "$flags" -o "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam -T /tmp/"$curSampleNoPath".sorted.bam "$outputFolder"/"$curSampleNoPath"/sortedFixed.bam
-		echo "Sample $curSampleNoPath has been sorted!"
-		rm "$outputFolder"/"$curSampleNoPath"/sortedFixed.bam
-		#Remove duplicate reads
-		samtools markdup -r "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam "$outputFolder"/"$curSampleNoPath"/markedDups.bam
-		# index bam files
-		samtools index -@ 8 "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam
-		samtools index -@ 8 "$outputFolder"/"$curSampleNoPath"/markedDups.bam
-	else
-		#Run fixmate -m to update paired-end flags for singletons
-		echo "Sample $curSampleNoPath singleton flags are being updated..."
-		samtools fixmate -m "$outputFolder"/"$curSampleNoPath"/sortedName.bam "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam
-		echo "Sample $curSampleNoPath singleton flags have been updated!"
-		rm "$outputFolder"/"$curSampleNoPath"/sortedName.bam
-		#Remove duplicate reads
-		#samtools markdup -r "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam "$outputFolder"/"$curSampleNoPath"/markedDups.bam
-	fi
+	#Run fixmate -m to update paired-end flags for singletons
+	echo "Sample $curSampleNoPath singleton flags are being updated..."
+	samtools fixmate -m "$outputFolder"/"$curSampleNoPath"/sortedName.bam "$outputFolder"/"$curSampleNoPath"/sortedFixed.bam
+	echo "Sample $curSampleNoPath singleton flags have been updated!"
+	#Clean up
+	rm "$outputFolder"/"$curSampleNoPath"/sortedName.bam
+	#Run samtools to prepare mapped reads for sorting by coordinate
+	#using 8 threads
+	echo "Sample $curSampleNoPath is being sorted..."
+	samtools sort "$flags" -o "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam -T /tmp/"$curSampleNoPath".sorted.bam "$outputFolder"/"$curSampleNoPath"/sortedFixed.bam
+	echo "Sample $curSampleNoPath has been sorted!"
+	rm "$outputFolder"/"$curSampleNoPath"/sortedFixed.bam
+	#Remove duplicate reads
+	samtools markdup -r "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam "$outputFolder"/"$curSampleNoPath"/markedDups.bam
+	# index bam files
+	samtools index -@ 8 "$outputFolder"/"$curSampleNoPath"/accepted_hits.bam
+	samtools index -@ 8 "$outputFolder"/"$curSampleNoPath"/markedDups.bam
 done
 
 # copy previous summaries

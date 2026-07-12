@@ -8,15 +8,11 @@
 
 # script to perform htseq-count counting of trimmed, aligned, then name sorted
 # paired end reads
-# usage: sbatch counting_htseq.sh sortedFolder
-# usage Ex: sbatch counting_htseq.sh sorted_coordinate
+# usage: sbatch counting_htseq.sh
 #Submitted batch job 
 
 # Required modules for servers
 module load htseq
-
-# retrieve input folder name
-sortedFolder=$1
 
 #Retrieve genome features absolute path for alignment
 genomeFile=$(grep "genomeFeatures:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/genomeFeatures://g")
@@ -24,7 +20,7 @@ genomeFile=$(grep "genomeFeatures:" ../"inputData/inputPaths.txt" | tr -d " " | 
 outputsPath=$(grep "outputs:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/outputs://g")
 
 # setup the inputs path
-inputsPath=$outputsPath"/"$sortedFolder
+inputsPath=$outputsPath"/sorted_coordinate"
 
 #Move to outputs directory
 cd "$outputsPath"
