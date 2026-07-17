@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --ntasks=8
 #SBATCH --partition=mack
-#SBATCH --time=96:00:00
+#SBATCH --time=288:00:00
 #SBATCH --mem-per-cpu=8GB
 #SBATCH --mail-user=e959b751@ku.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
@@ -9,7 +9,9 @@
 # script to perform htseq-count counting of trimmed, aligned, then name sorted
 # paired end reads
 # usage: sbatch counting_htseq.sh
-#Submitted batch job 
+#Submitted batch job 24433599
+# usage: sbatch counting_htseq.sh
+#Submitted batch job
 
 # Required modules for servers
 module load htseq
@@ -50,11 +52,17 @@ for f1 in "$inputsPath"/*/*.bam; do
 	mkdir "$outputFolder"/"$curSampleNoPath"
 	#Count reads using htseq-count
 	echo "Sample $curSampleNoPath is being counted..."
-	#Use coordinate sorted flag
-	#https://github.com/simon-anders/htseq/issues/37
-	#--secondary-alignments ignore --supplementary-alignments ignore
-	#Flag to output features in sam format
-	#-o "$outputFolder"/"$curSampleNoPath"/counted.sam
-	htseq-count -f bam -a 60 -r pos -s no -m union -t gene -i gene_id "$curAlignedSample" "$genomeFile" > "$outputFolder"/"$curSampleNoPath"/counts.txt
-	echo "Sample $curSampleNoPath has been counted!"
+	# print status message
+	echo "Processing $sampleTag"
+	if [[ -f $outputFolder"/"$curSampleNoPath"/counts.txt" ]]; then
+	    echo "File exists."
+	else
+		#Use coordinate sorted flag
+		#https://github.com/simon-anders/htseq/issues/37
+		#--secondary-alignments ignore --supplementary-alignments ignore
+		#Flag to output features in sam format
+		#-o "$outputFolder"/"$curSampleNoPath"/counted.sam
+		htseq-count -f bam -a 60 -r pos -s no -m union -t gene -i gene_id $curAlignedSample $genomeFile > $outputFolder"/"$curSampleNoPath"/counts.txt"
+		echo "Sample $curSampleNoPath has been counted!"
+	fi
 done
