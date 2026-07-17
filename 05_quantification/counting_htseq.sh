@@ -31,10 +31,10 @@ cd "$outputsPath"
 outputFolder="counted"
 mkdir "$outputFolder"
 # check if the folder already exists
-if [ $? -ne 0 ]; then
-	echo "The $outputsPath/$outputFolder directory already exsists... please remove before proceeding."
-	exit 1
-fi
+#if [ $? -ne 0 ]; then
+#	echo "The $outputsPath/$outputFolder directory already exsists... please remove before proceeding."
+#	exit 1
+#fi
 
 #Name output file of inputs
 inputOutFile=$outputFolder"/software_summary.txt"
