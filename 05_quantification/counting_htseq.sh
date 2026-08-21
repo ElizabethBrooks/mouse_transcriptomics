@@ -11,7 +11,9 @@
 # usage: sbatch counting_htseq.sh
 #Submitted batch job 24433599
 # usage: sbatch counting_htseq.sh
-#Submitted batch job
+#Submitted batch job 24833692
+# usage: sbatch counting_htseq.sh
+#Submitted batch job 25961347
 
 # Required modules for servers
 module load htseq

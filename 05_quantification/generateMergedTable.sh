@@ -17,7 +17,7 @@ cat $firstFile"/counts.txt" | cut -f1 >> $inputsPath"/counts_merged.tmp.csv"
 # merge counts for each sample
 for i in $inputsPath"/"*"/"; do 
 	# clean up sample name
-	newName=$(basename $i | sed "s/_S.*_L004//g")
+	newName=$(basename $i | sed "s/25450FL\-01\-01\-//g")
 	# status message
 	echo "Processing sample $newName..."
 	# add sample name to the sample outputs
