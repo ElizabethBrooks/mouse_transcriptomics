@@ -11,13 +11,13 @@ inputsPath=$outputsPath"/counted"
 
 # initialize the merged counts file
 echo "gene" > $inputsPath"/counts_merged.tmp.csv"
-firstFile=$(ls -1 $inputsPath | head -n 1)
+firstFile=$(ls -d $inputsPath | head -n 1)
 cat $firstFile"/counts.txt" | cut -f1 >> $inputsPath"/counts_merged.tmp.csv"
 
 # merge counts for each sample
 for i in $inputsPath"/"*"/"; do 
 	# clean up sample name
-	newName=$(basename $i | sed "s/25450FL\-01\-01\-//g")
+	newName=$(basename $i | sed "s/25450FL\-01\-01\-//g" | sed "s/_S.*//g")
 	# status message
 	echo "Processing sample $newName..."
 	# add sample name to the sample outputs
