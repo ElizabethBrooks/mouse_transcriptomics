@@ -11,7 +11,7 @@ inputsPath=$outputsPath"/counted"
 
 # initialize the merged counts file
 echo "gene" > $inputsPath"/counts_merged.tmp.csv"
-firstFile=$(ls -d $inputsPath | head -n 1)
+firstFile=$(ls -d $inputsPath/* | head -n 1)
 cat $firstFile"/counts.txt" | cut -f1 >> $inputsPath"/counts_merged.tmp.csv"
 
 # merge counts for each sample
