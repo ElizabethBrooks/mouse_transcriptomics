@@ -1,12 +1,13 @@
 #!/bin/bash
 #SBATCH --partition=sixhour
 #SBATCH --time=6:00:00
-#SBATCH --mem-per-cpu=8GB
+#SBATCH --mem-per-cpu=16GB
 #SBATCH --mail-user=e959b751@ku.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
 
 # script to keep only the longest isoforms in the input gff
 # usage: sbatch annotation_statistics_AGAT.sh
+## Submitted batch job 29907193
 
 # load software
 conda activate my_agat
@@ -29,7 +30,7 @@ mkdir "$outputFolder"
 mkdir $outputsPath"/AGAT"
 
 # status message
-echo "Beginning analysis of $speciesName..."
+echo "Beginning analysis..."
 
 # pre clean
 rm $outputsPath"/AGAT/annotation_stats.txt"

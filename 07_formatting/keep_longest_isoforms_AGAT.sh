@@ -8,11 +8,12 @@
 
 # script to keep only the longest isoforms in the input gff
 # usage: sbatch keep_longest_isoforms_AGAT.sh
+## Submitted batch job 29903589
 
 # load software
 conda activate my_agat
 
-# retrieve genome features absolute path for alignment
+# retrieve genome features absolute path
 genomeFile=$(grep "genomeFeatures:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/genomeFeatures://g")
 
 # retrieve analysis outputs absolute path
@@ -34,7 +35,7 @@ inputOutFile=$outputFolder"/software_summary.txt"
 agat --version > $inputOutFile
 
 # status message
-echo "Beginning analysis of $speciesName..."
+echo "Beginning analysis..."
 
 # pre clean
 rm $outputsPath"/AGAT/output_longest.gff"

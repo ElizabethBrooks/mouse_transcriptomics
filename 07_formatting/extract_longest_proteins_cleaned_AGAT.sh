@@ -8,11 +8,12 @@
 
 # script to keep only the longest proteins
 # usage: sbatch extract_longest_proteins_cleaned_AGAT.sh
+## Submitted batch job 29903593
 
 # load software
 conda activate my_agat
 
-# retrieve genome features absolute path for alignment
+# retrieve genome features absolute path
 genomeFile=$(grep "genomeReference:" ../"inputData/inputPaths.txt" | tr -d " " | sed "s/genomeReference://g")
 
 # retrieve analysis outputs absolute path
@@ -29,7 +30,7 @@ mkdir "$outputFolder"
 mkdir $outputsPath"/AGAT"
 
 # status message
-echo "Beginning analysis of $speciesName..."
+echo "Beginning analysis..."
 
 # pre clean
 rm $outputsPath"/AGAT/longest_protein_cleaned.fa"
