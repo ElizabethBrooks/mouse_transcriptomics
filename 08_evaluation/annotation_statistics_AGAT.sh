@@ -35,7 +35,7 @@ echo "Beginning analysis of $speciesName..."
 rm $outputsPath"/AGAT/annotation_stats.txt"
 
 # extract annotation statistics
-agat_sp_statistics.pl -gff $genomeFeat -g $genomeRef -o $outputsPath"/AGAT/annotation_stats.txt"
+agat_sp_statistics.pl --gff $genomeFeat -g $genomeRef -o $outputsPath"/AGAT/annotation_stats.txt"
 
 # status message
 echo "Analysis complete!"

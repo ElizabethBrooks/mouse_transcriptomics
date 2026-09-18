@@ -35,7 +35,7 @@ echo "Beginning analysis of $speciesName..."
 rm -r $outputsPath"/AGAT/functional_stats"
 
 # extract functional statistics
-agat_sp_functional_statistics.pl -gff $genomeFeat -g $genomeRef -o $outputsPath"/AGAT/functional_stats"
+agat_sp_functional_statistics.pl --gff $genomeFeat -g $genomeRef -o $outputsPath"/AGAT/functional_stats"
 
 # status message
 echo "Analysis complete!"
