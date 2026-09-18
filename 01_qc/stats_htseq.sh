@@ -7,6 +7,7 @@
 
 # Script to visualize stats from htseq
 # usage: sbatch stats_htseq.sh
+#Submitted batch job 29907691
 
 # required modules for servers
 module load fastqc
@@ -35,4 +36,4 @@ inputOutFile="$outputFolder"/"$outputFolder"_summary.txt
 multiqc --version > $inputOutFile
 
 # run multiqc to aggegrate the reports
-multiqc $inputsPath"/"*"/counts.txt" -o $outputFolder -n "multiqc"
+multiqc -d $inputsPath"/"*"/counts.txt" -o $outputFolder -n "multiqc"
