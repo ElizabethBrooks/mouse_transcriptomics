@@ -7,7 +7,7 @@
 
 # script to extract functional statistics
 # usage: sbatch functional_statistics_AGAT.sh
-## Submitted batch job 29906927
+## Submitted batch job 29907356
 
 # load software
 conda activate my_agat

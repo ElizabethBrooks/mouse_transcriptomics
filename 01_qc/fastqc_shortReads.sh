@@ -55,7 +55,7 @@ fastqc -version > $versionFile
 fastqc $readPath"/"*"_001."*".gz" -o $qcOut
 
 # run multiqc
-multiqc $qcOut -o $qcOut -n "multiqc"
+multiqc $qcOut"/"* -o $qcOut -n "multiqc"
 
 # Print status message
 echo "Analysis complete!"

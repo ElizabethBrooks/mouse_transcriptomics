@@ -6,7 +6,7 @@
 #SBATCH --mail-user=e959b751@ku.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
 
-# script to keep only the longest proteins
+# script to extract proteins
 # usage: sbatch extract_proteins_cleaned_gffread.sh
 
 # retrieve software path
@@ -25,7 +25,7 @@ cd $softwarePath
 # status message
 echo "Beginning analysis..."
 
-# extract longest proteins
+# extract proteins
 ./gffread -y $outputsPath"/Mus_musculus.GRCm39.proteins.fa" -g $genomeRef $genomeFeat -S -V
 
 # status message

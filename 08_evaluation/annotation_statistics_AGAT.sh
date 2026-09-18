@@ -7,7 +7,7 @@
 
 # script to keep only the longest isoforms in the input gff
 # usage: sbatch annotation_statistics_AGAT.sh
-## Submitted batch job 29907193
+## Submitted batch job 29907305
 
 # load software
 conda activate my_agat

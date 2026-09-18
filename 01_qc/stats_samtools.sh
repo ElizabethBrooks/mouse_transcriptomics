@@ -48,4 +48,4 @@ for f1 in $inputsPath"/"*/; do
 done
 
 # run multiqc to aggegrate the reports
-multiqc $outputFolder -o $outputFolder -n "multiqc"
+multiqc $outputFolder"/"* -o $outputFolder -n "multiqc"
