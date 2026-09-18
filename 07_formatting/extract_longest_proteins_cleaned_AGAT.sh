@@ -35,7 +35,7 @@ echo "Beginning analysis of $speciesName..."
 rm $outputsPath"/AGAT/longest_protein_cleaned.fa"
 
 # extract longest proteins
-agat_sp_extract_sequences.pl -gff $outputsPath"/AGAT/output_longest.gff" -f $genomeFile -p -o $outputsPath"/AGAT/longest_protein_cleaned.fa" --clean_final_stop --clean_internal_stop --thread 8
+agat_sp_extract_sequences.pl -g $outputsPath"/AGAT/output_longest.gff" -f $genomeFile -p -o $outputsPath"/AGAT/longest_protein_cleaned.fa" --clean_final_stop --clean_internal_stop --thread 8
 
 # status message
 echo "Analysis complete!"

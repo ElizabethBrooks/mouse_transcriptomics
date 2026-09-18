@@ -35,7 +35,7 @@ echo "Beginning analysis of $speciesName..."
 rm $outputsPath"/AGAT/longest_mRNA.fa"
 
 # extract longest transcripts
-agat_sp_extract_sequences.pl -gff $outputsPath"/AGAT/output_longest.gff" -f $genomeFile -t mRNA -o $outputsPath"/AGAT/longest_mRNA.fa" --thread 8
+agat_sp_extract_sequences.pl -g $outputsPath"/AGAT/output_longest.gff" -f $genomeFile -t mRNA -o $outputsPath"/AGAT/longest_mRNA.fa" --thread 8
 
 # status message
 echo "Analysis complete!"
