@@ -22,7 +22,7 @@ plotColors <- carto_pal(12, "Safe")
 plotColorSubset <- c(plotColors[4], plotColors[5], plotColors[6])
 
 # set working directory
-workingDir="/Users/bamflappy/MackLab/metabolic_adaptation/Biostatistics/DEAnalysis_14Sep2026/single_means_random"
+workingDir="/Users/bamflappy/MackLab/metabolic_adaptation/Biostatistics/DEAnalysis_14Sep2026/single_means_random_domesticus"
 dir.create(workingDir)
 setwd(workingDir)
 
@@ -42,6 +42,11 @@ cutLFC <- log2(1.2)
 # trim the data table to remove lines with counting statistics (htseq)
 removeList <- c("__no_feature", "__ambiguous", "__too_low_aQual", "__not_aligned", "__alignment_not_unique")
 countsTable <- inputTable[!row.names(inputTable) %in% removeList,]
+
+# remove castaneus samples
+remove <- rownames(factors[grepl("CAST", factors$mouseline),])
+countsTable <- select(all_of(countsTable), -c(remove))
+factors <- factors[!grepl("CAST", factors$mouseline),]
 
 # convert the grouping data into factors 
 targets <- as.data.frame(lapply(factors, as.factor))

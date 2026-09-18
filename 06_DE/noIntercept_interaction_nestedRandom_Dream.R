@@ -21,7 +21,7 @@ plotColors <- carto_pal(12, "Safe")
 plotColorSubset <- c(plotColors[4], plotColors[5], plotColors[6])
 
 # set working directory
-workingDir="/Users/bamflappy/MackLab/metabolic_adaptation/Biostatistics/DEAnalysis_14Sep2026/interaction_nested_random_domesticus"
+workingDir="/Users/bamflappy/MackLab/metabolic_adaptation/Biostatistics/DEAnalysis_14Sep2026/no_intercept_interaction_nested_random"
 dir.create(workingDir)
 setwd(workingDir)
 
@@ -41,11 +41,6 @@ cutLFC <- log2(1.2)
 # trim the data table to remove lines with counting statistics (htseq)
 removeList <- c("__no_feature", "__ambiguous", "__too_low_aQual", "__not_aligned", "__alignment_not_unique")
 countsTable <- inputTable[!row.names(inputTable) %in% removeList,]
-
-# remove castaneus samples
-remove <- rownames(factors[grepl("CAST", factors$mouseline),])
-countsTable <- select(all_of(countsTable), -c(remove))
-factors <- factors[!grepl("CAST", factors$mouseline),]
 
 # convert the grouping data into factors 
 targets <- as.data.frame(lapply(factors, as.factor))
@@ -69,7 +64,7 @@ setdiff(rownames(targets), colnames(countsTable))
 smallestGroupSize <- 2
 
 # keep only rows that have a count of at least 10 for a minimal number of samples
-keep <- rowSums(cpm(countsTable) >= 10) >= smallestGroupSize
+keep <- rowSums(cpm(countsTable) >= 0.1) >= smallestGroupSize
 list <- DGEList(countsTable[keep, ])
 
 # percentage of genes lost from filtering
@@ -96,7 +91,7 @@ write.table(normListLog, file="normalizedCounts_logTransformed.csv", sep=",", ro
 param <- SnowParam(4, "SOCK", progressbar = TRUE)
 
 # The variable to be tested must be a fixed effect
-form <- ~ tissue + treatment + sex + mouseline + mouseline:(1|individual) + tissue:mouseline + tissue:sex + treatment:tissue + treatment:mouseline + mouseline:sex
+form <- ~ 0 + tissue + treatment + sex + mouseline + mouseline:(1|individual) + tissue:mouseline + tissue:sex + treatment:tissue + treatment:mouseline + mouseline:sex
 
 # estimate weights using linear mixed model of dream
 vobjDream <- voomWithDreamWeights(dge, form, targets, BPPARAM = param)
@@ -124,38 +119,32 @@ colnames(fitmm$design)
 # mouseline: MANF vs SARA (skinny vs fat)
 # sex: M vs F (unlimited food)
 
-# How does food restriction affect gene expression in M. m. domesticus?
+# How does food restriction affect gene expression in M. m.?
 ## treatmentFood_Restriction
 # How do SARA respond differently than MANF to 12-hr food restriction? 
 ## treatmentFood_Restriction:mouselineMANF
-# What genes are expressed differently in M. m. domesticus F compared to M?
-## sexF
+# What genes are expressed differently in M. m. F compared to M?
+## sexFemale
 # What genes are expressed differently in SARA compared to MANF?
 ## mouselineMANF
-
-# get all results of hypothesis test on treatment
-treatment_dge_results <- topTable(fitmm, coef = "treatmentFood_Restriction", number = nrow(dge))
-genotype_dge_results <- topTable(fitmm, coef = "mouselineMANF", number = nrow(dge))
-sex_dge_results <- topTable(fitmm, coef = "sexF", number = nrow(dge))
-interactionMANF_dge_results <- topTable(fitmm, coef = "treatmentFood_Restriction:mouselineMANF", number = nrow(dge))
-
-# export table of DE genes
-treatment_dge_results_tbl <- as_tibble(treatment_dge_results, rownames = "gene")
-write.table(treatment_dge_results_tbl, file="treatmentFood_Restriction.csv", sep=",", row.names=FALSE, quote=FALSE)
-genotype_dge_results_tbl <- as_tibble(genotype_dge_results, rownames = "gene")
-write.table(genotype_dge_results_tbl, file="mouselineMANF.csv", sep=",", row.names=FALSE, quote=FALSE)
-sex_dge_results_tbl <- as_tibble(sex_dge_results, rownames = "gene")
-write.table(sex_dge_results_tbl, file="sexF.csv", sep=",", row.names=FALSE, quote=FALSE)
-sex_dge_results_tbl <- as_tibble(sex_dge_results, rownames = "gene")
-write.table(sex_dge_results_tbl, file="sexF.csv", sep=",", row.names=FALSE, quote=FALSE)
-interactionMANF_dge_results_tbl <- as_tibble(interactionMANF_dge_results, rownames = "gene")
-write.table(interactionMANF_dge_results_tbl, file="treatmentFood_Restriction_mouselineMANF", sep=",", row.names=FALSE, quote=FALSE)
+# How do SARA respond differently than MANF in F vs M?
+## sexFemale:mouselineMANF
+# What genes are expressed in M. m. tissues?
+## tissueBAT
+## tissueWAT
+## tissueHYP
+## tissueLIV
 
 # get genes < FDR and LFC cutoffs
 treatment_dge_sig <- topTable(fitmm, coef = "treatmentFood_Restriction", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
 genotype_dge_sig <- topTable(fitmm, coef = "mouselineMANF", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
-sex_dge_sig <- topTable(fitmm, coef = "sexF", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
-interactionMANF_dge_sig <- topTable(fitmm, coef = "treatmentFood_Restriction:mouselineMANF", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
+sex_dge_sig <- topTable(fitmm, coef = "sexFemale", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
+treatment_interaction_dge_sig <- topTable(fitmm, coef = "treatmentFood_Restriction:mouselineMANF", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
+sex_interaction_dge_sig <- topTable(fitmm, coef = "sexFemale:mouselineMANF", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
+tissue_BAT_dge_sig <- topTable(fitmm, coef = "tissueBAT", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
+tissue_WAT_dge_sig <- topTable(fitmm, coef = "tissueWAT", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
+tissue_HYP_dge_sig <- topTable(fitmm, coef = "tissueHYP", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
+tissue_LIV_dge_sig <- topTable(fitmm, coef = "tissueLIV", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
 
 # export table of sig DE genes
 treatment_dge_sig_tbl <- as_tibble(treatment_dge_sig, rownames = "gene")
@@ -167,19 +156,63 @@ genotype_out_file <- paste("mouselineMANF", "FDR", cutFDR, "LFC", cutLFC, sep = 
 genotype_out_file <- paste(genotype_out_file, "csv", sep = ".")
 write.table(genotype_dge_sig_tbl, file=genotype_out_file, sep=",", row.names=FALSE, quote=FALSE)
 sex_dge_sig_tbl <- as_tibble(sex_dge_sig, rownames = "gene")
-sex_out_file <- paste("sexF", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
+sex_out_file <- paste("sexFemale", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
 sex_out_file <- paste(sex_out_file, "csv", sep = ".")
 write.table(sex_dge_sig_tbl, file=sex_out_file, sep=",", row.names=FALSE, quote=FALSE)
-interactionMANF_dge_sig_tbl <- as_tibble(interactionMANF_dge_sig, rownames = "gene")
-interactionMANF_out_file <- paste("treatmentFood_Restriction_mouselineMANF", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
-interactionMANF_out_file <- paste(interactionMANF_out_file, "csv", sep = ".")
-write.table(interactionMANF_dge_sig_tbl, file=interactionMANF_out_file, sep=",", row.names=FALSE, quote=FALSE)
+treatment_interaction_dge_sig_tbl <- as_tibble(treatment_interaction_dge_sig, rownames = "gene")
+treatment_interaction_out_file <- paste("treatmentFood_Restriction_mouselineMANF", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
+treatment_interaction_out_file <- paste(treatment_interaction_out_file, "csv", sep = ".")
+write.table(treatment_interaction_dge_sig_tbl, file=treatment_interaction_out_file, sep=",", row.names=FALSE, quote=FALSE)
+sex_interaction_dge_sig_tbl <- as_tibble(treatment_interaction_dge_sig, rownames = "gene")
+sex_interaction_out_file <- paste("sexFemale_mouselineMANF", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
+sex_interaction_out_file <- paste(sex_interaction_out_file, "csv", sep = ".")
+write.table(sex_interaction_dge_sig_tbl, file=sex_interaction_out_file, sep=",", row.names=FALSE, quote=FALSE)
+tissue_BAT_dge_sig_tbl <- as_tibble(tissue_BAT_dge_sig, rownames = "gene")
+tissue_BAT_out_file <- paste("tissueBAT", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
+tissue_BAT_out_file <- paste(tissue_BAT_out_file, "csv", sep = ".")
+write.table(tissue_BAT_dge_sig_tbl, file=tissue_BAT_out_file, sep=",", row.names=FALSE, quote=FALSE)
+tissue_WAT_dge_sig_tbl <- as_tibble(tissue_BAT_dge_sig, rownames = "gene")
+tissue_WAT_out_file <- paste("tissueWAT", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
+tissue_WAT_out_file <- paste(tissue_WAT_out_file, "csv", sep = ".")
+write.table(tissue_WAT_dge_sig_tbl, file=tissue_WAT_out_file, sep=",", row.names=FALSE, quote=FALSE)
+tissue_HYP_dge_sig_tbl <- as_tibble(tissue_BAT_dge_sig, rownames = "gene")
+tissue_HYP_out_file <- paste("tissueHYP", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
+tissue_HYP_out_file <- paste(tissue_HYP_out_file, "csv", sep = ".")
+write.table(tissue_HYP_dge_sig_tbl, file=tissue_HYP_out_file, sep=",", row.names=FALSE, quote=FALSE)
+tissue_LIV_dge_sig_tbl <- as_tibble(tissue_BAT_dge_sig, rownames = "gene")
+tissue_LIV_out_file <- paste("tissueLIV", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
+tissue_LIV_out_file <- paste(tissue_LIV_out_file, "csv", sep = ".")
+write.table(tissue_LIV_dge_sig_tbl, file=tissue_LIV_out_file, sep=",", row.names=FALSE, quote=FALSE)
 
 # check the number of sig DE genes
 nrow(treatment_dge_sig)
 nrow(genotype_dge_sig)
 nrow(sex_dge_sig)
-nrow(interactionMANF_dge_sig)
+nrow(treatment_interaction_dge_sig)
+nrow(sex_interaction_dge_sig)
+#nrow(tissue_BAT_dge_sig)
+#nrow(tissue_WAT_dge_sig)
+#nrow(tissue_HYP_dge_sig)
+#nrow(tissue_LIV_dge_sig)
+
+# get all results of hypothesis test on treatment
+treatment_dge_results <- topTable(fitmm, coef = "treatmentFood_Restriction", number = nrow(dge))
+genotype_dge_results <- topTable(fitmm, coef = "mouselineMANF", number = nrow(dge))
+sex_dge_results <- topTable(fitmm, coef = "sexFemale", number = nrow(dge))
+treatment_interaction_dge_results <- topTable(fitmm, coef = "treatmentFood_Restriction:mouselineMANF", number = nrow(dge))
+sex_interaction_dge_results <- topTable(fitmm, coef = "sexFemale:mouselineMANF", number = nrow(dge))
+
+# export table of DE genes
+treatment_dge_results_tbl <- as_tibble(treatment_dge_results, rownames = "gene")
+write.table(treatment_dge_results_tbl, file="treatmentFood_Restriction.csv", sep=",", row.names=FALSE, quote=FALSE)
+genotype_dge_results_tbl <- as_tibble(genotype_dge_results, rownames = "gene")
+write.table(genotype_dge_results_tbl, file="mouselineMANF.csv", sep=",", row.names=FALSE, quote=FALSE)
+sex_dge_results_tbl <- as_tibble(sex_dge_results, rownames = "gene")
+write.table(sex_dge_results_tbl, file="sexFemale.csv", sep=",", row.names=FALSE, quote=FALSE)
+treatment_interaction_dge_results_tbl <- as_tibble(treatment_interaction_dge_results, rownames = "gene")
+write.table(treatment_interaction_dge_results_tbl, file="treatmentFood_Restriction_mouselineMANF", sep=",", row.names=FALSE, quote=FALSE)
+sex_interaction_dge_results_tbl <- as_tibble(sex_interaction_dge_results, rownames = "gene")
+write.table(sex_interaction_dge_results_tbl, file="sexFemale_mouselineMANF", sep=",", row.names=FALSE, quote=FALSE)
 
 # add column for identifying direction of DE gene expression
 treatment_dge_sig_tbl$colorDE <- plotColors[5]
@@ -234,7 +267,7 @@ ggplot(data=genotype_dge_sig_tbl, aes(x=logFC, y=negLog10FDR, color = colorDE, a
   scale_alpha(guide = 'none') +
   xlab("LFC")
 dev.off()
-jpeg("sexF_volcano.jpg")
+jpeg("sexFemale_volcano.jpg")
 ggplot(data=sex_dge_sig_tbl, aes(x=logFC, y=negLog10FDR, color = colorDE, alpha = alphaDE)) + 
   geom_point() +
   theme_minimal() +
@@ -286,7 +319,7 @@ dev.off()
 jpeg("mouselineMANF_heatmap.jpg")
 heatmap(as.matrix(logcountsSubset_genotype), margins = c(8, 1), labRow = FALSE)
 dev.off()
-jpeg("sexF_heatmap.jpg")
+jpeg("sexFemale_heatmap.jpg")
 heatmap(as.matrix(logcountsSubset_sex), margins = c(8, 1), labRow = FALSE)
 dev.off()
 #jpeg("treatmentUV_groupHT_heatmap.jpg")

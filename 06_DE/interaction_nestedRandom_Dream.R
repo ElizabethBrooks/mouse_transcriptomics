@@ -84,65 +84,6 @@ normListLog <- cpm(dge, normalized.lib.sizes=TRUE, log=TRUE)
 normListLog <- as_tibble(normListLog, rownames = "gene")
 write.table(normListLog, file="normalizedCounts_logTransformed.csv", sep=",", row.names=FALSE, quote=FALSE)
 
-# setup a design matrix
-sample_group_pca <- factor(paste(targets$mouseline, targets$treatment, sep="."))
-
-# list sample levels
-levels(sample_group_pca)
-
-# setup points and colors for PCA
-points <- c(0,0,1,1,2,2)
-colors <-  rep(c(plotColors[4], plotColors[6]), 3)
-
-# create a PCA plot with a legend
-png("mouseline_treatment_plotPCA.png", units="in", width=6, height=5, res=300)
-par(mar=c(4.1, 4.1, 5.1, 0.1), xpd=TRUE)
-plotMDS(dge, col=colors[sample_group_pca], pch=points[sample_group_pca], gene.selection="common")
-legend("top", inset=c(0,-0.2), legend=levels(sample_group_pca), pch=points, col=colors, ncol=3, cex = 0.8)
-dev.off()
-
-# setup a design matrix
-sample_group_pca <- factor(paste(targets$mouseline, targets$sex, sep="."))
-
-# list sample levels
-levels(sample_group_pca)
-
-# setup points and colors for PCA
-points <- c(0,0,1,1,2,2)
-colors <-  rep(c(plotColors[4], plotColors[6]), 3)
-
-# create a PCA plot with a legend
-png("mouseline_sex_plotPCA.png", units="in", width=6, height=5, res=300)
-par(mar=c(4.1, 4.1, 5.1, 0.1), xpd=TRUE)
-plotMDS(dge, col=colors[sample_group_pca], pch=points[sample_group_pca], gene.selection="common")
-legend("top", inset=c(0,-0.2), legend=levels(sample_group_pca), pch=points, col=colors, ncol=3)
-dev.off()
-
-# setup a design matrix
-sample_group_pca <- factor(paste(targets$mouseline, targets$tissue, sep="."))
-
-# list sample levels
-levels(sample_group_pca)
-
-# setup points and colors for PCA
-points <- c(0,0,0,0,1,1,1,1,2,2,2,2)
-#points <- c(15,15,15,15,16,16,16,16,17,17,17,17)
-colors <-  rep(c(plotColors[4], plotColors[5], plotColors[6], plotColors[7]), 3)
-
-# create a PCA plot with a legend
-png("mouseline_tissue_plotPCA.png", units="in", width=8, height=7, res=300)
-par(mar=c(4.1, 4.1, 5.1, 0.1), xpd=TRUE)
-plotMDS(dge, col=colors[sample_group_pca], pch=points[sample_group_pca], gene.selection="common")
-legend("top", inset=c(0,-0.2), legend=levels(sample_group_pca), pch=points, col=colors, ncol=3)
-dev.off()
-
-# create a PCA plot with a legend
-png("mouseline_tissue_plotPCA_pc3and4.png", units="in", width=8, height=7, res=300)
-par(mar=c(4.1, 4.1, 5.1, 0.1), xpd=TRUE)
-plotMDS(dge, col=colors[sample_group_pca], pch=points[sample_group_pca], gene.selection="common", dim.plot = c(3, 4))
-legend("top", inset=c(0,-0.2), legend=levels(sample_group_pca), pch=points, col=colors, ncol=3)
-dev.off()
-
 
 ## Dream analysis
 
@@ -154,15 +95,6 @@ form <- ~ tissue + treatment + sex + mouseline + mouseline:(1|individual) + tiss
 
 # estimate weights using linear mixed model of dream
 vobjDream <- voomWithDreamWeights(dge, form, targets, BPPARAM = param)
-
-# check the variance partitioning to identify important variables that should be included as fixed or random effects
-formVP <- ~ tissue + treatment + sex + mouseline + tissue:mouseline + tissue:sex + treatment:tissue + treatment:mouseline + mouseline:sex
-vp <- fitExtractVarPartModel(vobjDream, formVP, targets)
-
-# violin plot of contribution of each variable to total variance
-jpeg("varPart.jpg")
-plotVarPart(sortCols(vp))
-dev.off()
 
 # estimate regression coefficients
 fitmm <- dream(vobjDream, form, targets)
@@ -183,14 +115,14 @@ colnames(fitmm$design)
 # How do SARA respond differently than MANF to 12-hr food restriction? 
 ## treatmentFood_Restriction:mouselineMANF
 # What genes are expressed differently in M. m. domesticus F compared to M?
-## sexF
+## sexFemale
 # What genes are expressed differently in SARA compared to MANF?
 ## mouselineMANF
 
 # get all results of hypothesis test on treatment
 treatment_dge_results <- topTable(fitmm, coef = "treatmentFood_Restriction", number = nrow(dge))
 genotype_dge_results <- topTable(fitmm, coef = "mouselineMANF", number = nrow(dge))
-sex_dge_results <- topTable(fitmm, coef = "sexF", number = nrow(dge))
+sex_dge_results <- topTable(fitmm, coef = "sexFemale", number = nrow(dge))
 interactionMANF_dge_results <- topTable(fitmm, coef = "treatmentFood_Restriction:mouselineMANF", number = nrow(dge))
 
 # export table of DE genes
@@ -199,16 +131,16 @@ write.table(treatment_dge_results_tbl, file="treatmentFood_Restriction.csv", sep
 genotype_dge_results_tbl <- as_tibble(genotype_dge_results, rownames = "gene")
 write.table(genotype_dge_results_tbl, file="mouselineMANF.csv", sep=",", row.names=FALSE, quote=FALSE)
 sex_dge_results_tbl <- as_tibble(sex_dge_results, rownames = "gene")
-write.table(sex_dge_results_tbl, file="sexF.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(sex_dge_results_tbl, file="sexFemale.csv", sep=",", row.names=FALSE, quote=FALSE)
 sex_dge_results_tbl <- as_tibble(sex_dge_results, rownames = "gene")
-write.table(sex_dge_results_tbl, file="sexF.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(sex_dge_results_tbl, file="sexFemale.csv", sep=",", row.names=FALSE, quote=FALSE)
 interactionMANF_dge_results_tbl <- as_tibble(interactionMANF_dge_results, rownames = "gene")
 write.table(interactionMANF_dge_results_tbl, file="treatmentFood_Restriction_mouselineMANF", sep=",", row.names=FALSE, quote=FALSE)
 
 # get genes < FDR and LFC cutoffs
 treatment_dge_sig <- topTable(fitmm, coef = "treatmentFood_Restriction", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
 genotype_dge_sig <- topTable(fitmm, coef = "mouselineMANF", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
-sex_dge_sig <- topTable(fitmm, coef = "sexF", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
+sex_dge_sig <- topTable(fitmm, coef = "sexFemale", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
 interactionMANF_dge_sig <- topTable(fitmm, coef = "treatmentFood_Restriction:mouselineMANF", number = nrow(dge), p.value = cutFDR, lfc = cutLFC)
 
 # export table of sig DE genes
@@ -221,7 +153,7 @@ genotype_out_file <- paste("mouselineMANF", "FDR", cutFDR, "LFC", cutLFC, sep = 
 genotype_out_file <- paste(genotype_out_file, "csv", sep = ".")
 write.table(genotype_dge_sig_tbl, file=genotype_out_file, sep=",", row.names=FALSE, quote=FALSE)
 sex_dge_sig_tbl <- as_tibble(sex_dge_sig, rownames = "gene")
-sex_out_file <- paste("sexF", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
+sex_out_file <- paste("sexFemale", "FDR", cutFDR, "LFC", cutLFC, sep = "_")
 sex_out_file <- paste(sex_out_file, "csv", sep = ".")
 write.table(sex_dge_sig_tbl, file=sex_out_file, sep=",", row.names=FALSE, quote=FALSE)
 interactionMANF_dge_sig_tbl <- as_tibble(interactionMANF_dge_sig, rownames = "gene")
@@ -288,7 +220,7 @@ ggplot(data=genotype_dge_sig_tbl, aes(x=logFC, y=negLog10FDR, color = colorDE, a
   scale_alpha(guide = 'none') +
   xlab("LFC")
 dev.off()
-jpeg("sexF_volcano.jpg")
+jpeg("sexFemale_volcano.jpg")
 ggplot(data=sex_dge_sig_tbl, aes(x=logFC, y=negLog10FDR, color = colorDE, alpha = alphaDE)) + 
   geom_point() +
   theme_minimal() +
@@ -340,7 +272,7 @@ dev.off()
 jpeg("mouselineMANF_heatmap.jpg")
 heatmap(as.matrix(logcountsSubset_genotype), margins = c(8, 1), labRow = FALSE)
 dev.off()
-jpeg("sexF_heatmap.jpg")
+jpeg("sexFemale_heatmap.jpg")
 heatmap(as.matrix(logcountsSubset_sex), margins = c(8, 1), labRow = FALSE)
 dev.off()
 #jpeg("treatmentUV_groupHT_heatmap.jpg")
