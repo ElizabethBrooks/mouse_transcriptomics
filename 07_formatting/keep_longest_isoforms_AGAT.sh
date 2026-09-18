@@ -1,7 +1,13 @@
 #!/bin/bash
+#SBATCH --ntasks=8
+#SBATCH --partition=sixhour
+#SBATCH --time=6:00:00
+#SBATCH --mem-per-cpu=8GB
+#SBATCH --mail-user=e959b751@ku.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
 
 # script to keep only the longest isoforms in the input gff
-# usage: bash keep_longest_isoforms_AGAT.sh
+# usage: sbatch keep_longest_isoforms_AGAT.sh
 
 # load software
 conda activate my_agat
@@ -34,7 +40,7 @@ echo "Beginning analysis of $speciesName..."
 rm $outputsPath"/AGAT/output_longest.gff"
 
 # extract longest isoforms
-agat_sp_keep_longest_isoform.pl -f $genomeFile -o $outputsPath"/AGAT/output_longest.gff"
+agat_sp_keep_longest_isoform.pl -f $genomeFile -o $outputsPath"/AGAT/output_longest.gff" --thread 8
 
 # status message
 echo "Analysis complete!"

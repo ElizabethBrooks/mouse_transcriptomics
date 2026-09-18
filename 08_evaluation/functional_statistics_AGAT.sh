@@ -1,4 +1,5 @@
 #!/bin/bash
+#SBATCH --ntasks=8
 #SBATCH --partition=sixhour
 #SBATCH --time=6:00:00
 #SBATCH --mem-per-cpu=8GB
@@ -35,7 +36,7 @@ echo "Beginning analysis of $speciesName..."
 rm -r $outputsPath"/AGAT/functional_stats"
 
 # extract functional statistics
-agat_sp_functional_statistics.pl -gff $genomeFeat -g $genomeRef -o $outputsPath"/AGAT/functional_stats"
+agat_sp_functional_statistics.pl -gff $genomeFeat -g $genomeRef -o $outputsPath"/AGAT/functional_stats" --thread 8
 
 # status message
 echo "Analysis complete!"
