@@ -1,5 +1,4 @@
 #!/bin/bash
-#SBATCH --ntasks=8
 #SBATCH --partition=sixhour
 #SBATCH --time=6:00:00
 #SBATCH --mem-per-cpu=8GB
@@ -36,7 +35,7 @@ echo "Beginning analysis of $speciesName..."
 rm $outputsPath"/AGAT/annotation_stats.txt"
 
 # extract annotation statistics
-agat_sp_statistics.pl -gff $genomeFeat -g $genomeRef -o $outputsPath"/AGAT/annotation_stats.txt" --thread 8
+agat_sp_statistics.pl -gff $genomeFeat -g $genomeRef -o $outputsPath"/AGAT/annotation_stats.txt"
 
 # status message
 echo "Analysis complete!"
