@@ -7,7 +7,7 @@
 
 # Script to visualize stats from htseq
 # usage: sbatch stats_htseq.sh
-#Submitted batch job 29907691
+#Submitted batch job 29907870
 
 # required modules for servers
 module load fastqc
@@ -23,7 +23,7 @@ outputFolder=$outputsPath"/stats_counted"
 mkdir "$outputFolder"
 # check if the folder already exists
 if [ $? -ne 0 ]; then
-	echo "The $outputsPath directory already exsists... please remove before proceeding."
+	echo "The $outputsPath"/stats_counted" directory already exsists... please remove before proceeding."
 	exit 1
 fi
 
