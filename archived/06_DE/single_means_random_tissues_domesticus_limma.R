@@ -24,7 +24,7 @@ plotColors <- carto_pal(12, "Safe")
 plotColorSubset <- c(plotColors[4], plotColors[5], plotColors[6])
 
 # set working directory
-workingDir="/Users/bamflappy/MackLab/metabolic_adaptation/Biostatistics/DEAnalysis_14Sep2026/single_means_random_tissues_domesticus"
+workingDir="/Users/bamflappy/MackLab/metabolic_adaptation/Biostatistics/DA_28Oct2026/single_means_random_tissues_domesticus_LFC0"
 dir.create(workingDir)
 setwd(workingDir)
 
@@ -38,8 +38,8 @@ factors <- read.csv(file="/Users/bamflappy/MackLab/input_data/experimental_desig
 cutFDR <- 0.05
 
 # set LFC cut
-#cutFC <- 1.2
-cutLFC <- log2(1.2)
+#cutLFC <- log2(1.2)
+cutLFC <- 0
 
 # trim the data table to remove lines with counting statistics (htseq)
 removeList <- c("__no_feature", "__ambiguous", "__too_low_aQual", "__not_aligned", "__alignment_not_unique")
